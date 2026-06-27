@@ -296,7 +296,7 @@
     </div>
     <div class="card">
       <table class="data-table">
-        <thead><tr><th>Title</th><th>Series</th><th>Status</th><th>Platform</th><th>Target Date</th><th>Pillar</th><th></th></tr></thead>
+        <thead><tr><th>ID</th><th>Title</th><th>Series</th><th>Status</th><th>Platform</th><th>Target Date</th><th>Pillar</th><th></th></tr></thead>
         <tbody id="posts-table-body"></tbody>
       </table>
     </div>
@@ -488,6 +488,10 @@
           <div class="form-group">
             <label class="form-label">Target Date</label>
             <input class="form-input" type="date" id="p-target-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Volume / Issue ID</label>
+            <input class="form-input" id="p-volume-id" placeholder="e.g. FP-001, CO-003, SM-001">
           </div>
         </div>
       </div>
@@ -856,6 +860,7 @@ async function loadPosts() {
 
   document.getElementById('posts-table-body').innerHTML = posts.map(p => `
     <tr onclick="openPostModal('${p.id}')">
+      <td style="color:var(--accent);font-size:12px;font-weight:600;white-space:nowrap;">${p.volume_id||'—'}</td>
       <td style="max-width:220px;font-weight:500;">${p.title}</td>
       <td><span class="series-tag">${p.series||''}</span></td>
       <td>${statusPill(p.status)}</td>
@@ -912,6 +917,7 @@ function populatePostForm(p) {
   document.getElementById('p-cta').value = p.cta || '';
   document.getElementById('p-hashtags').value = p.hashtags || '';
   document.getElementById('p-image-concept').value = p.image_concept || '';
+  document.getElementById('p-volume-id').value = p.volume_id || '';
   document.getElementById('p-posted-date').value = p.posted_date || '';
   document.getElementById('p-posted-link').value = p.posted_link || '';
   document.getElementById('p-performance-notes').value = p.performance_notes || '';
@@ -921,7 +927,7 @@ function populatePostForm(p) {
 }
 
 function clearPostForm() {
-  ['p-title','p-hook','p-content','p-cta','p-hashtags','p-image-concept','p-posted-date','p-posted-link','p-performance-notes','p-repurpose-opps','p-target-date'].forEach(id => document.getElementById(id).value = '');
+  ['p-title','p-hook','p-content','p-cta','p-hashtags','p-image-concept','p-volume-id','p-posted-date','p-posted-link','p-performance-notes','p-repurpose-opps','p-target-date'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('p-series').value = 'Flight Path';
   document.getElementById('p-status').value = 'Idea';
   document.getElementById('p-pillar').value = '';
@@ -941,6 +947,7 @@ async function savePost() {
     cta: document.getElementById('p-cta').value,
     hashtags: document.getElementById('p-hashtags').value,
     image_concept: document.getElementById('p-image-concept').value,
+    volume_id: document.getElementById('p-volume-id').value,
     posted_date: document.getElementById('p-posted-date').value,
     posted_link: document.getElementById('p-posted-link').value,
     performance_notes: document.getElementById('p-performance-notes').value,

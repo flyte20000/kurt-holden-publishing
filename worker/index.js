@@ -79,20 +79,20 @@ export default {
       return json(results || []);
     }
     if (path === '/api/posts' && method === 'POST') {
-      const { title, series, pillar, status, target_date, platform, hook, content, image_concept, cta, hashtags, performance_notes, repurpose_opps, posted_link, posted_date } = body;
+      const { title, series, pillar, status, target_date, platform, hook, content, image_concept, cta, hashtags, performance_notes, repurpose_opps, posted_link, posted_date, volume_id } = body;
       if (!title) return err('Title required');
       const id = randId(8);
       const n = now();
-      await db.prepare(`INSERT INTO posts (id,title,series,pillar,status,target_date,platform,hook,content,image_concept,cta,hashtags,performance_notes,repurpose_opps,posted_link,posted_date,created_at,updated_at)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-        .bind(id,title,series||'Flight Path',pillar||'',status||'Idea',target_date||'',platform||'LinkedIn',hook||'',content||'',image_concept||'',cta||'',hashtags||'',performance_notes||'',repurpose_opps||'',posted_link||'',posted_date||'',n,n).run();
+      await db.prepare(`INSERT INTO posts (id,title,series,pillar,status,target_date,platform,hook,content,image_concept,cta,hashtags,performance_notes,repurpose_opps,posted_link,posted_date,volume_id,created_at,updated_at)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+        .bind(id,title,series||'Flight Path',pillar||'',status||'Idea',target_date||'',platform||'LinkedIn',hook||'',content||'',image_concept||'',cta||'',hashtags||'',performance_notes||'',repurpose_opps||'',posted_link||'',posted_date||'',volume_id||'',n,n).run();
       return json({ ok: true, id });
     }
     if (path.match(/^\/api\/posts\/[^/]+$/) && method === 'PUT') {
       const id = path.split('/')[3];
-      const { title, series, pillar, status, target_date, platform, hook, content, image_concept, cta, hashtags, performance_notes, repurpose_opps, posted_link, posted_date } = body;
-      await db.prepare(`UPDATE posts SET title=?,series=?,pillar=?,status=?,target_date=?,platform=?,hook=?,content=?,image_concept=?,cta=?,hashtags=?,performance_notes=?,repurpose_opps=?,posted_link=?,posted_date=?,updated_at=? WHERE id=?`)
-        .bind(title,series,pillar||'',status,target_date||'',platform||'LinkedIn',hook||'',content||'',image_concept||'',cta||'',hashtags||'',performance_notes||'',repurpose_opps||'',posted_link||'',posted_date||'',now(),id).run();
+      const { title, series, pillar, status, target_date, platform, hook, content, image_concept, cta, hashtags, performance_notes, repurpose_opps, posted_link, posted_date, volume_id } = body;
+      await db.prepare(`UPDATE posts SET title=?,series=?,pillar=?,status=?,target_date=?,platform=?,hook=?,content=?,image_concept=?,cta=?,hashtags=?,performance_notes=?,repurpose_opps=?,posted_link=?,posted_date=?,volume_id=?,updated_at=? WHERE id=?`)
+        .bind(title,series,pillar||'',status,target_date||'',platform||'LinkedIn',hook||'',content||'',image_concept||'',cta||'',hashtags||'',performance_notes||'',repurpose_opps||'',posted_link||'',posted_date||'',volume_id||'',now(),id).run();
       return json({ ok: true });
     }
     if (path.match(/^\/api\/posts\/[^/]+$/) && method === 'DELETE') {
@@ -180,7 +180,7 @@ export default {
       if (!q) return json({ posts: [], articles: [], strategy: [] });
       const like = `%${q}%`;
       const [posts, articles, strat] = await Promise.all([
-        db.prepare('SELECT id,title,series,status,target_date,hook FROM posts WHERE title LIKE ? OR hook LIKE ? OR content LIKE ? OR hashtags LIKE ? ORDER BY updated_at DESC LIMIT 20').bind(like,like,like,like).all(),
+        db.prepare('SELECT id,title,series,status,target_date,volume_id,hook FROM posts WHERE title LIKE ? OR hook LIKE ? OR content LIKE ? OR hashtags LIKE ? OR target_date LIKE ? OR posted_date LIKE ? OR volume_id LIKE ? ORDER BY target_date DESC LIMIT 20').bind(like,like,like,like,like,like,like).all(),
         db.prepare('SELECT id,title,series,status,publish_date FROM articles WHERE title LIKE ? OR draft LIKE ? OR main_argument LIKE ? ORDER BY updated_at DESC LIMIT 10').bind(like,like,like).all(),
         db.prepare('SELECT id,type,title,body FROM strategy WHERE title LIKE ? OR body LIKE ? ORDER BY created_at DESC LIMIT 10').bind(like,like).all(),
       ]);
