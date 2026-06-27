@@ -1,0 +1,11 @@
+name = "kurt-publishing-api"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kurt-publishing-db"
+database_id = "14c52291-373d-40a3-9ce2-466ac6ce7e62"
+
+[vars]
+ENVIRONMENT = "production"

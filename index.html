@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurt Holden — Publishing Command Center</title>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #1a1d24;
+    --border: #252830;
+    --accent: #3b82f6;
+    --accent2: #6366f1;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --purple: #8b5cf6;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --pill-idea: #374151;
+    --pill-outline: #1e3a5f;
+    --pill-drafting: #1e3a5f;
+    --pill-editing: #4c1d95;
+    --pill-image: #92400e;
+    --pill-ready: #065f46;
+    --pill-posted: #1f2937;
+    --pill-repurpose: #374151;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: radial-gradient(ellipse at center, #0f1520 0%, #0a0c10 70%); }
+  .login-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px 40px; width: 380px; text-align: center; }
+  .login-logo { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
+  .login-sub { color: var(--muted); font-size: 13px; margin-bottom: 36px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .login-box input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; color: var(--text); font-size: 14px; margin-bottom: 12px; outline: none; }
+  .login-box input:focus { border-color: var(--accent); }
+  .login-btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+  .login-btn:hover { background: #2563eb; }
+  .login-err { color: var(--red); font-size: 13px; margin-top: 12px; }
+
+  /* APP SHELL */
+  #app { display: none; }
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; height: 56px; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .header-brand { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #3b82f6, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+  .header-nav { display: flex; gap: 4px; flex: 1; }
+  .nav-btn { background: none; border: none; color: var(--muted); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; white-space: nowrap; transition: all 0.15s; }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { background: var(--surface2); color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .search-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; color: var(--text); font-size: 13px; width: 200px; outline: none; }
+  .search-box:focus { border-color: var(--accent); }
+  .logout-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+  .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* PANELS */
+  .panel { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* DASHBOARD */
+  .dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .stat-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .stat-val { font-size: 32px; font-weight: 700; }
+  .stat-val.blue { color: var(--accent); }
+  .stat-val.green { color: var(--green); }
+  .stat-val.yellow { color: var(--yellow); }
+  .stat-val.purple { color: var(--purple); }
+  .dash-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+
+  /* PIPELINE */
+  .pipeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stage-col { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .stage-header { padding: 12px 14px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between; }
+  .stage-badge { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 2px 8px; font-size: 11px; }
+  .stage-body { padding: 8px; min-height: 120px; }
+  .post-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
+  .post-card:hover { border-color: var(--accent); }
+  .post-card-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
+  .post-card-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+  .pipeline-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* TAGS / PILLS */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .pill-idea { background: var(--pill-idea); color: #9ca3af; }
+  .pill-outline { background: var(--pill-outline); color: #60a5fa; }
+  .pill-drafting { background: #1e3a5f; color: #60a5fa; }
+  .pill-editing { background: #4c1d95; color: #c4b5fd; }
+  .pill-image { background: #92400e; color: #fcd34d; }
+  .pill-ready { background: #065f46; color: #6ee7b7; }
+  .pill-posted { background: #1f2937; color: #6b7280; }
+  .pill-repurpose { background: #374151; color: #9ca3af; }
+  .pill-draft { background: #1e3a5f; color: #60a5fa; }
+  .pill-published { background: #065f46; color: #6ee7b7; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.15s; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-danger { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .btn-danger:hover { background: rgba(239,68,68,0.25); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-gold { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+  .btn-gold:hover { background: rgba(245,158,11,0.25); }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { text-align: left; padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+  .data-table tr { cursor: pointer; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 700px; position: relative; }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-size: 16px; font-weight: 700; }
+  .modal-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .form-input, .form-select, .form-textarea { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+  .form-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  .form-select option { background: var(--surface); }
+
+  /* TOOLBAR ROW */
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .toolbar-spacer { flex: 1; }
+  .filter-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+  .filter-chip:hover, .filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* WEEKLY PLANNER */
+  .week-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .week-day { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .week-day-header { padding: 14px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
+  .week-day-body { padding: 14px; }
+  .week-selector { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; outline: none; margin-top: 8px; }
+
+  /* STRATEGY LIBRARY */
+  .strategy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .strategy-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color 0.15s; }
+  .strategy-card:hover { border-color: var(--accent); }
+  .strategy-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .strategy-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .strategy-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* SEARCH RESULTS */
+  .search-result-section { margin-bottom: 24px; }
+  .search-result-section h3 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .search-result-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; cursor: pointer; }
+  .search-result-item:hover { border-color: var(--accent); }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+    .dash-row { grid-template-columns: 1fr; }
+    .pipeline-grid { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-2col { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: 1fr; }
+    .strategy-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .header-nav { overflow-x: auto; }
+    .search-box { display: none; }
+  }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+  .empty-state svg { opacity: 0.2; margin-bottom: 12px; }
+
+  .series-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; background: rgba(59,130,246,0.15); color: #60a5fa; }
+
+  .type-voice { color: #6366f1; }
+  .type-hook { color: #f59e0b; }
+  .type-cta { color: #10b981; }
+  .type-pillar { color: #8b5cf6; }
+
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.3s; }
+
+  .tab-row { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .tab-btn { background: none; border: none; color: var(--muted); padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .char-count { font-size: 11px; color: var(--muted); text-align: right; margin-top: 4px; }
+  .char-warn { color: var(--yellow); }
+  .char-over { color: var(--red); }
+
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--green); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--green); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .toast.err { border-color: var(--red); color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">KH</div>
+    <div class="login-sub">Publishing Command Center</div>
+    <input type="text" id="login-user" placeholder="Username" autocomplete="username">
+    <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="header">
+    <div class="header-brand">KH Publishing</div>
+    <nav class="header-nav">
+      <button class="nav-btn active" onclick="showPanel('dashboard')">Dashboard</button>
+      <button class="nav-btn" onclick="showPanel('pipeline')">Pipeline</button>
+      <button class="nav-btn" onclick="showPanel('posts')">All Posts</button>
+      <button class="nav-btn" onclick="showPanel('articles')">Articles</button>
+      <button class="nav-btn" onclick="showPanel('weekly')">Weekly Plan</button>
+      <button class="nav-btn" onclick="showPanel('strategy')">Strategy</button>
+      <button class="nav-btn" onclick="showPanel('archive')">Archive</button>
+    </nav>
+    <div class="header-right">
+      <input class="search-box" type="text" placeholder="Search..." id="global-search" oninput="triggerSearch(this.value)">
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="dash-grid" id="dash-stats">
+      <div class="stat-card"><div class="stat-label">Ready to Post</div><div class="stat-val blue" id="stat-ready">—</div></div>
+      <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-val yellow" id="stat-wip">—</div></div>
+      <div class="stat-card"><div class="stat-label">Posted This Month</div><div class="stat-val green" id="stat-posted">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Posts</div><div class="stat-val purple" id="stat-total">—</div></div>
+    </div>
+    <div class="dash-row">
+      <div class="card">
+        <div class="card-title">Next Up — Ready to Post</div>
+        <table class="data-table" id="dash-ready-table">
+          <thead><tr><th>Title</th><th>Series</th><th>Platform</th><th>Date</th></tr></thead>
+          <tbody id="dash-ready-body"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Pipeline Status</div>
+        <div id="dash-pipeline-summary"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIPELINE (KANBAN) -->
+  <div class="panel" id="panel-pipeline">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Content Pipeline</span>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-primary" onclick="openPostModal()">+ New Post</button>
+    </div>
+    <div id="pipeline-board"></div>
+  </div>
+
+  <!-- ALL POSTS TABLE -->
+  <div class="panel" id="panel-posts">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">All Posts</span>
+      <div id="posts-filters" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+      <div class="toolbar-spacer"></div>
+      <select class="form-select" id="series-filter" onchange="loadPosts()" style="width:160px;">
+        <option value="">All Series</option>
+        <option>Flight Path</option>
+        <option>Championship Operations</option>
+        <option>The Safety Margin</option>
+      </select>
+      <button class="btn btn-primary" onclick="openPostModal()">+ New Post</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportPosts()">Export</button>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Series</th><th>Status</th><th>Platform</th><th>Target Date</th><th>Pillar</th><th></th></tr></thead>
+        <tbody id="posts-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ARTICLES -->
+  <div class="panel" id="panel-articles">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Articles</span>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-primary" onclick="openArticleModal()">+ New Article</button>
+      <button class="btn btn-secondary btn-sm" onclick="exportArticles()">Export</button>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Series</th><th>Status</th><th>Publish Date</th><th>Main Argument</th><th></th></tr></thead>
+        <tbody id="articles-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WEEKLY PLANNER -->
+  <div class="panel" id="panel-weekly">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Weekly Plan</span>
+      <div class="toolbar-spacer"></div>
+      <input type="week" id="week-picker" class="form-input" onchange="loadWeeklyPlan()" style="width:180px;">
+      <button class="btn btn-primary" onclick="saveWeeklyPlan()">Save Week</button>
+    </div>
+    <div id="weekly-plan-area">
+      <div class="week-grid">
+        <div class="week-day">
+          <div class="week-day-header">Tuesday Post</div>
+          <div class="week-day-body">
+            <div id="weekly-tue-preview" style="color:var(--muted);font-size:13px;">No post selected</div>
+            <select class="week-selector" id="weekly-tue-id" onchange="updateWeeklyPreview('tue')">
+              <option value="">— Select Post —</option>
+            </select>
+          </div>
+        </div>
+        <div class="week-day">
+          <div class="week-day-header">Thursday Post</div>
+          <div class="week-day-body">
+            <div id="weekly-thu-preview" style="color:var(--muted);font-size:13px;">No post selected</div>
+            <select class="week-selector" id="weekly-thu-id" onchange="updateWeeklyPreview('thu')">
+              <option value="">— Select Post —</option>
+            </select>
+          </div>
+        </div>
+        <div class="week-day">
+          <div class="week-day-header">Sunday Post</div>
+          <div class="week-day-body">
+            <div id="weekly-sun-preview" style="color:var(--muted);font-size:13px;">No post selected</div>
+            <select class="week-selector" id="weekly-sun-id" onchange="updateWeeklyPreview('sun')">
+              <option value="">— Select Post —</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;" class="card">
+        <div class="card-title">Week Notes</div>
+        <textarea class="form-textarea" id="weekly-notes" placeholder="Theme, focus, context for this week..." style="width:100%;min-height:80px;"></textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+          <span style="font-size:12px;color:var(--muted);">Status:</span>
+          <select class="form-select" id="weekly-status" style="width:160px;">
+            <option value="planning">Planning</option>
+            <option value="locked">Locked</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:16px;" class="card">
+        <div class="card-title">Recent Weeks</div>
+        <table class="data-table" id="weekly-history-table">
+          <thead><tr><th>Week Of</th><th>Tuesday</th><th>Thursday</th><th>Sunday</th><th>Status</th></tr></thead>
+          <tbody id="weekly-history-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGY LIBRARY -->
+  <div class="panel" id="panel-strategy">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Strategy Library</span>
+      <div style="display:flex;gap:6px;">
+        <button class="filter-chip active" onclick="filterStrategy('',this)">All</button>
+        <button class="filter-chip" onclick="filterStrategy('voice_rule',this)">Voice Rules</button>
+        <button class="filter-chip" onclick="filterStrategy('hook',this)">Hooks</button>
+        <button class="filter-chip" onclick="filterStrategy('cta',this)">CTAs</button>
+        <button class="filter-chip" onclick="filterStrategy('pillar',this)">Pillars</button>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-primary" onclick="openStrategyModal()">+ Add Item</button>
+    </div>
+    <div class="strategy-grid" id="strategy-grid"></div>
+  </div>
+
+  <!-- ARCHIVE -->
+  <div class="panel" id="panel-archive">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Posted Archive</span>
+      <div class="toolbar-spacer"></div>
+      <select class="form-select" id="archive-series-filter" onchange="loadArchive()" style="width:160px;">
+        <option value="">All Series</option>
+        <option>Flight Path</option>
+        <option>Championship Operations</option>
+        <option>The Safety Margin</option>
+      </select>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Series</th><th>Platform</th><th>Posted Date</th><th>Link</th><th>Repurpose Opps</th><th></th></tr></thead>
+        <tbody id="archive-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SEARCH PANEL -->
+  <div class="panel" id="panel-search">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:700;">Search Results</span>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-secondary" onclick="showPanel('dashboard')">← Back</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="post-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="post-modal-title">New Post</div>
+      <button class="modal-close" onclick="closeModal('post-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchPostTab('core',this)">Core</button>
+        <button class="tab-btn" onclick="switchPostTab('content',this)">Content</button>
+        <button class="tab-btn" onclick="switchPostTab('publish',this)">Publish</button>
+      </div>
+      <!-- Core tab -->
+      <div id="post-tab-core">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Title *</label>
+            <input class="form-input" id="p-title" placeholder="Post title / working title">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Series</label>
+            <select class="form-select" id="p-series">
+              <option>Flight Path</option>
+              <option>Championship Operations</option>
+              <option>The Safety Margin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="p-status">
+              <option>Idea</option>
+              <option>Outline</option>
+              <option>Drafting</option>
+              <option>Editing</option>
+              <option>Image Needed</option>
+              <option>Ready to Post</option>
+              <option>Posted</option>
+              <option>Repurpose Later</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pillar</label>
+            <select class="form-select" id="p-pillar">
+              <option value="">— Select Pillar —</option>
+              <option>Aviation Leadership</option>
+              <option>Championship Operations</option>
+              <option>Safety Leadership</option>
+              <option>AI in Aviation</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Platform</label>
+            <select class="form-select" id="p-platform">
+              <option>LinkedIn</option>
+              <option>Newsletter</option>
+              <option>Both</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Date</label>
+            <input class="form-input" type="date" id="p-target-date">
+          </div>
+        </div>
+      </div>
+      <!-- Content tab -->
+      <div id="post-tab-content" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Hook / Opening Line</label>
+            <textarea class="form-textarea" id="p-hook" rows="3" placeholder="The opening line that stops the scroll..." oninput="charCount(this,'hook-count',220)"></textarea>
+            <div class="char-count" id="hook-count">0 / 220</div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Content / Body</label>
+            <textarea class="form-textarea" id="p-content" rows="8" placeholder="Full post content..." oninput="charCount(this,'content-count',3000)"></textarea>
+            <div class="char-count" id="content-count">0 / 3000</div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">CTA / Closing</label>
+            <textarea class="form-textarea" id="p-cta" rows="2" placeholder="Call to action or closing line..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hashtags</label>
+            <input class="form-input" id="p-hashtags" placeholder="#aviation #leadership #safety">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image Concept</label>
+            <input class="form-input" id="p-image-concept" placeholder="Describe the image...">
+          </div>
+        </div>
+      </div>
+      <!-- Publish tab -->
+      <div id="post-tab-publish" style="display:none;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Posted Date</label>
+            <input class="form-input" type="date" id="p-posted-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Posted Link</label>
+            <input class="form-input" id="p-posted-link" placeholder="https://linkedin.com/posts/...">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Performance Notes</label>
+            <textarea class="form-textarea" id="p-performance-notes" placeholder="Impressions, likes, comments, what worked..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Repurpose Opportunities</label>
+            <textarea class="form-textarea" id="p-repurpose-opps" placeholder="How could this be reused or expanded..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="post-delete-btn" style="display:none;margin-right:auto;" onclick="deletePost()">Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('post-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="savePost()">Save Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div class="modal-overlay" id="article-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="article-modal-title">New Article</div>
+      <button class="modal-close" onclick="closeModal('article-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchArticleTab('core',this)">Core</button>
+        <button class="tab-btn" onclick="switchArticleTab('draft',this)">Draft</button>
+        <button class="tab-btn" onclick="switchArticleTab('publish',this)">Publish</button>
+      </div>
+      <div id="article-tab-core">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Title *</label>
+            <input class="form-input" id="a-title" placeholder="Article title">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Series</label>
+            <select class="form-select" id="a-series">
+              <option>Flight Path</option>
+              <option>Championship Operations</option>
+              <option>The Safety Margin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="a-status">
+              <option>Draft</option>
+              <option>Editing</option>
+              <option>Final</option>
+              <option>Published</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Main Argument</label>
+            <textarea class="form-textarea" id="a-main-argument" placeholder="Core thesis / what you're arguing..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Supporting Stories / Evidence</label>
+            <textarea class="form-textarea" id="a-supporting-stories" placeholder="Anecdotes, data points, examples..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Teaser (Newsletter Preview)</label>
+            <textarea class="form-textarea" id="a-teaser" rows="2" placeholder="Email preview line..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Publish Date</label>
+            <input class="form-input" type="date" id="a-publish-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <input class="form-input" id="a-notes" placeholder="Research, sources, reminders...">
+          </div>
+        </div>
+      </div>
+      <div id="article-tab-draft" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Draft</label>
+          <textarea class="form-textarea" id="a-draft" rows="16" placeholder="Write your draft here..." style="min-height:300px;font-family:Georgia,serif;line-height:1.7;"></textarea>
+        </div>
+      </div>
+      <div id="article-tab-publish" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Final Version</label>
+          <textarea class="form-textarea" id="a-final-version" rows="16" placeholder="Final polished version..." style="min-height:300px;font-family:Georgia,serif;line-height:1.7;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="article-delete-btn" style="display:none;margin-right:auto;" onclick="deleteArticle()">Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('article-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveArticle()">Save Article</button>
+    </div>
+  </div>
+</div>
+
+<!-- STRATEGY MODAL -->
+<div class="modal-overlay" id="strategy-modal">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <div class="modal-title" id="strategy-modal-title">New Strategy Item</div>
+      <button class="modal-close" onclick="closeModal('strategy-modal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-select" id="s-type">
+            <option value="voice_rule">Voice Rule</option>
+            <option value="hook">Hook</option>
+            <option value="cta">CTA</option>
+            <option value="pillar">Pillar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="s-title" placeholder="Title">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Body</label>
+          <textarea class="form-textarea" id="s-body" rows="5" placeholder="Content, rule, or description..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="strategy-delete-btn" style="display:none;margin-right:auto;" onclick="deleteStrategy()">Delete</button>
+      <button class="btn btn-secondary" onclick="closeModal('strategy-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStrategy()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://kurt-publishing-api.kurt-307.workers.dev';
+let token = localStorage.getItem('kh_token') || '';
+let currentPostId = null;
+let currentArticleId = null;
+let currentStrategyId = null;
+let allPosts = [];
+let postsFilter = '';
+let strategyFilter = '';
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
+  if (!username || !password) return;
+  try {
+    const r = await fetch(API + '/api/auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({username, password})
+    });
+    const d = await r.json();
+    if (!r.ok) { document.getElementById('login-err').textContent = d.error || 'Login failed'; return; }
+    token = d.token;
+    localStorage.setItem('kh_token', token);
+    showApp();
+  } catch(e) { document.getElementById('login-err').textContent = 'Connection error'; }
+}
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function doLogout() {
+  await apiFetch('/api/auth/logout', {method:'POST'});
+  token = ''; localStorage.removeItem('kh_token');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadDashboard();
+  setDefaultWeek();
+  loadWeeklyHistory();
+}
+
+if (token) showApp();
+
+async function apiFetch(path, opts = {}) {
+  const r = await fetch(API + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token, ...(opts.headers||{}) }
+  });
+  if (r.status === 401) { doLogout(); return null; }
+  return r;
+}
+
+// ── PANEL NAV ─────────────────────────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => { if (b.textContent.toLowerCase().includes(name.slice(0,4))) b.classList.add('active'); });
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'pipeline') loadPipeline();
+  if (name === 'posts') loadPosts();
+  if (name === 'articles') loadArticles();
+  if (name === 'weekly') { loadWeeklyHistory(); loadWeeklyPostOptions(); }
+  if (name === 'strategy') loadStrategy();
+  if (name === 'archive') loadArchive();
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (type === 'err' ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const r = await apiFetch('/api/posts'); if (!r) return;
+  const posts = await r.json();
+  allPosts = posts;
+
+  const ready = posts.filter(p => p.status === 'Ready to Post');
+  const wip = posts.filter(p => ['Outline','Drafting','Editing','Image Needed'].includes(p.status));
+  const thisMonth = posts.filter(p => p.status === 'Posted' && p.posted_date && p.posted_date.startsWith(new Date().toISOString().slice(0,7)));
+
+  document.getElementById('stat-ready').textContent = ready.length;
+  document.getElementById('stat-wip').textContent = wip.length;
+  document.getElementById('stat-posted').textContent = thisMonth.length;
+  document.getElementById('stat-total').textContent = posts.length;
+
+  const rb = document.getElementById('dash-ready-body');
+  rb.innerHTML = ready.slice(0,8).map(p => `
+    <tr onclick="openPostModal('${p.id}')">
+      <td style="max-width:200px;">${p.title}</td>
+      <td><span class="series-tag">${p.series||''}</span></td>
+      <td>${p.platform||''}</td>
+      <td>${p.target_date||'—'}</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted);padding:20px;">No posts ready to publish</td></tr>';
+
+  const stageCounts = {};
+  ['Idea','Outline','Drafting','Editing','Image Needed','Ready to Post','Posted','Repurpose Later'].forEach(s => {
+    stageCounts[s] = posts.filter(p => p.status === s).length;
+  });
+  const total = posts.length || 1;
+  document.getElementById('dash-pipeline-summary').innerHTML = Object.entries(stageCounts).map(([s,c]) => `
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="font-size:12px;">${s}</span>
+        <span style="font-size:12px;color:var(--muted);">${c}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(c/total*100)}%"></div></div>
+    </div>`).join('');
+}
+
+// ── PIPELINE ──────────────────────────────────────────────────────────────────
+const STAGES = [
+  ['Idea','#374151'],
+  ['Outline','#1e3a5f'],
+  ['Drafting','#1e3a5f'],
+  ['Editing','#4c1d95'],
+  ['Image Needed','#92400e'],
+  ['Ready to Post','#065f46'],
+  ['Posted','#1f2937'],
+  ['Repurpose Later','#374151'],
+];
+
+async function loadPipeline() {
+  const r = await apiFetch('/api/posts'); if (!r) return;
+  const posts = await r.json();
+  allPosts = posts;
+
+  const active = STAGES.slice(0,6);
+  const board = document.getElementById('pipeline-board');
+  board.innerHTML = `<div class="pipeline-grid">${active.map(([s,c]) => {
+    const cards = posts.filter(p => p.status === s);
+    return `<div class="stage-col">
+      <div class="stage-header" style="background:${c}20;color:${s==='Ready to Post'?'#6ee7b7':s==='Image Needed'?'#fcd34d':s==='Editing'?'#c4b5fd':'#9ca3af'};">
+        ${s}<span class="stage-badge">${cards.length}</span>
+      </div>
+      <div class="stage-body">
+        ${cards.map(p => `<div class="post-card" onclick="openPostModal('${p.id}')">
+          <div class="post-card-title">${p.title}</div>
+          <div class="post-card-meta">
+            <span>${p.platform||'LinkedIn'}</span>
+            ${p.target_date ? `<span>${p.target_date}</span>` : ''}
+            ${p.pillar ? `<span style="color:var(--purple)">${p.pillar}</span>` : ''}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('')}</div>
+  <div class="pipeline-2col" style="margin-top:12px;">
+    ${STAGES.slice(6).map(([s,c]) => {
+      const cards = posts.filter(p => p.status === s);
+      return `<div class="stage-col">
+        <div class="stage-header" style="background:${c}20;color:#6b7280;">
+          ${s}<span class="stage-badge">${cards.length}</span>
+        </div>
+        <div class="stage-body">
+          ${cards.map(p => `<div class="post-card" onclick="openPostModal('${p.id}')">
+            <div class="post-card-title">${p.title}</div>
+            <div class="post-card-meta">
+              <span>${p.platform||''}</span>
+              ${p.posted_date ? `<span>Posted: ${p.posted_date}</span>` : ''}
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ── POSTS TABLE ───────────────────────────────────────────────────────────────
+async function loadPosts() {
+  const series = document.getElementById('series-filter').value;
+  const status = postsFilter;
+  let url = '/api/posts?';
+  if (status) url += 'status=' + encodeURIComponent(status) + '&';
+  if (series) url += 'series=' + encodeURIComponent(series);
+  const r = await apiFetch(url); if (!r) return;
+  const posts = await r.json();
+
+  const filters = document.getElementById('posts-filters');
+  const statuses = ['','Idea','Outline','Drafting','Editing','Image Needed','Ready to Post','Posted','Repurpose Later'];
+  filters.innerHTML = statuses.map(s => `<button class="filter-chip${postsFilter===s?' active':''}" onclick="setPostFilter('${s}')">${s||'All'}</button>`).join('');
+
+  document.getElementById('posts-table-body').innerHTML = posts.map(p => `
+    <tr onclick="openPostModal('${p.id}')">
+      <td style="max-width:220px;font-weight:500;">${p.title}</td>
+      <td><span class="series-tag">${p.series||''}</span></td>
+      <td>${statusPill(p.status)}</td>
+      <td style="color:var(--muted);">${p.platform||''}</td>
+      <td style="color:var(--muted);">${p.target_date||'—'}</td>
+      <td style="color:var(--muted);font-size:12px;">${p.pillar||''}</td>
+      <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();openPostModal('${p.id}')">Edit</button></td>
+    </tr>`).join('') || '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:24px;">No posts found</td></tr>';
+}
+
+function setPostFilter(s) { postsFilter = s; loadPosts(); }
+
+function statusPill(s) {
+  const map = {
+    'Idea':'idea','Outline':'outline','Drafting':'drafting','Editing':'editing',
+    'Image Needed':'image','Ready to Post':'ready','Posted':'posted','Repurpose Later':'repurpose',
+    'Draft':'draft','Final':'ready','Published':'published'
+  };
+  return `<span class="pill pill-${map[s]||'idea'}">${s}</span>`;
+}
+
+// ── POST MODAL ────────────────────────────────────────────────────────────────
+async function openPostModal(id = null) {
+  currentPostId = id;
+  const isNew = !id;
+  document.getElementById('post-modal-title').textContent = isNew ? 'New Post' : 'Edit Post';
+  document.getElementById('post-delete-btn').style.display = isNew ? 'none' : 'inline-flex';
+  switchPostTab('core', document.querySelector('#post-modal .tab-btn'));
+
+  if (!isNew) {
+    const p = allPosts.find(p => p.id === id);
+    if (p) populatePostForm(p);
+    else {
+      const r = await apiFetch('/api/posts'); if (!r) return;
+      const posts = await r.json();
+      const found = posts.find(p => p.id === id);
+      if (found) populatePostForm(found);
+    }
+  } else {
+    clearPostForm();
+  }
+  document.getElementById('post-modal').classList.add('open');
+}
+
+function populatePostForm(p) {
+  document.getElementById('p-title').value = p.title || '';
+  document.getElementById('p-series').value = p.series || 'Flight Path';
+  document.getElementById('p-status').value = p.status || 'Idea';
+  document.getElementById('p-pillar').value = p.pillar || '';
+  document.getElementById('p-platform').value = p.platform || 'LinkedIn';
+  document.getElementById('p-target-date').value = p.target_date || '';
+  document.getElementById('p-hook').value = p.hook || '';
+  document.getElementById('p-content').value = p.content || '';
+  document.getElementById('p-cta').value = p.cta || '';
+  document.getElementById('p-hashtags').value = p.hashtags || '';
+  document.getElementById('p-image-concept').value = p.image_concept || '';
+  document.getElementById('p-posted-date').value = p.posted_date || '';
+  document.getElementById('p-posted-link').value = p.posted_link || '';
+  document.getElementById('p-performance-notes').value = p.performance_notes || '';
+  document.getElementById('p-repurpose-opps').value = p.repurpose_opps || '';
+  charCount(document.getElementById('p-hook'), 'hook-count', 220);
+  charCount(document.getElementById('p-content'), 'content-count', 3000);
+}
+
+function clearPostForm() {
+  ['p-title','p-hook','p-content','p-cta','p-hashtags','p-image-concept','p-posted-date','p-posted-link','p-performance-notes','p-repurpose-opps','p-target-date'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('p-series').value = 'Flight Path';
+  document.getElementById('p-status').value = 'Idea';
+  document.getElementById('p-pillar').value = '';
+  document.getElementById('p-platform').value = 'LinkedIn';
+}
+
+async function savePost() {
+  const data = {
+    title: document.getElementById('p-title').value.trim(),
+    series: document.getElementById('p-series').value,
+    status: document.getElementById('p-status').value,
+    pillar: document.getElementById('p-pillar').value,
+    platform: document.getElementById('p-platform').value,
+    target_date: document.getElementById('p-target-date').value,
+    hook: document.getElementById('p-hook').value,
+    content: document.getElementById('p-content').value,
+    cta: document.getElementById('p-cta').value,
+    hashtags: document.getElementById('p-hashtags').value,
+    image_concept: document.getElementById('p-image-concept').value,
+    posted_date: document.getElementById('p-posted-date').value,
+    posted_link: document.getElementById('p-posted-link').value,
+    performance_notes: document.getElementById('p-performance-notes').value,
+    repurpose_opps: document.getElementById('p-repurpose-opps').value,
+  };
+  if (!data.title) { toast('Title is required', 'err'); return; }
+  const method = currentPostId ? 'PUT' : 'POST';
+  const url = currentPostId ? `/api/posts/${currentPostId}` : '/api/posts';
+  const r = await apiFetch(url, { method, body: JSON.stringify(data) });
+  if (!r || !r.ok) { toast('Save failed', 'err'); return; }
+  toast('Post saved');
+  closeModal('post-modal');
+  refreshCurrentPanel();
+}
+
+async function deletePost() {
+  if (!currentPostId || !confirm('Delete this post?')) return;
+  await apiFetch(`/api/posts/${currentPostId}`, { method: 'DELETE' });
+  toast('Post deleted');
+  closeModal('post-modal');
+  refreshCurrentPanel();
+}
+
+// ── ARTICLES ──────────────────────────────────────────────────────────────────
+async function loadArticles() {
+  const r = await apiFetch('/api/articles'); if (!r) return;
+  const articles = await r.json();
+  document.getElementById('articles-table-body').innerHTML = articles.map(a => `
+    <tr onclick="openArticleModal('${a.id}')">
+      <td style="max-width:220px;font-weight:500;">${a.title}</td>
+      <td><span class="series-tag">${a.series||''}</span></td>
+      <td>${statusPill(a.status)}</td>
+      <td style="color:var(--muted);">${a.publish_date||'—'}</td>
+      <td style="color:var(--muted);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.main_argument||''}</td>
+      <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();openArticleModal('${a.id}')">Edit</button></td>
+    </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:24px;">No articles yet</td></tr>';
+}
+
+let allArticles = [];
+async function openArticleModal(id = null) {
+  currentArticleId = id;
+  document.getElementById('article-modal-title').textContent = id ? 'Edit Article' : 'New Article';
+  document.getElementById('article-delete-btn').style.display = id ? 'inline-flex' : 'none';
+  switchArticleTab('core', document.querySelector('#article-modal .tab-btn'));
+
+  if (id) {
+    let a = allArticles.find(a => a.id === id);
+    if (!a) { const r = await apiFetch('/api/articles'); if (r) allArticles = await r.json(); a = allArticles.find(a => a.id === id); }
+    if (a) {
+      document.getElementById('a-title').value = a.title || '';
+      document.getElementById('a-series').value = a.series || 'Flight Path';
+      document.getElementById('a-status').value = a.status || 'Draft';
+      document.getElementById('a-main-argument').value = a.main_argument || '';
+      document.getElementById('a-supporting-stories').value = a.supporting_stories || '';
+      document.getElementById('a-teaser').value = a.teaser || '';
+      document.getElementById('a-publish-date').value = a.publish_date || '';
+      document.getElementById('a-notes').value = a.notes || '';
+      document.getElementById('a-draft').value = a.draft || '';
+      document.getElementById('a-final-version').value = a.final_version || '';
+    }
+  } else {
+    ['a-title','a-main-argument','a-supporting-stories','a-teaser','a-publish-date','a-notes','a-draft','a-final-version'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('a-series').value = 'Flight Path';
+    document.getElementById('a-status').value = 'Draft';
+  }
+  document.getElementById('article-modal').classList.add('open');
+}
+
+async function saveArticle() {
+  const data = {
+    title: document.getElementById('a-title').value.trim(),
+    series: document.getElementById('a-series').value,
+    status: document.getElementById('a-status').value,
+    main_argument: document.getElementById('a-main-argument').value,
+    supporting_stories: document.getElementById('a-supporting-stories').value,
+    teaser: document.getElementById('a-teaser').value,
+    publish_date: document.getElementById('a-publish-date').value,
+    notes: document.getElementById('a-notes').value,
+    draft: document.getElementById('a-draft').value,
+    final_version: document.getElementById('a-final-version').value,
+  };
+  if (!data.title) { toast('Title is required', 'err'); return; }
+  const method = currentArticleId ? 'PUT' : 'POST';
+  const url = currentArticleId ? `/api/articles/${currentArticleId}` : '/api/articles';
+  const r = await apiFetch(url, { method, body: JSON.stringify(data) });
+  if (!r || !r.ok) { toast('Save failed', 'err'); return; }
+  toast('Article saved');
+  closeModal('article-modal');
+  loadArticles();
+}
+
+async function deleteArticle() {
+  if (!currentArticleId || !confirm('Delete this article?')) return;
+  await apiFetch(`/api/articles/${currentArticleId}`, { method: 'DELETE' });
+  toast('Article deleted');
+  closeModal('article-modal');
+  loadArticles();
+}
+
+// ── WEEKLY PLANNER ────────────────────────────────────────────────────────────
+function setDefaultWeek() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.setDate(diff));
+  const year = monday.getFullYear();
+  const week = getWeekNumber(monday);
+  document.getElementById('week-picker').value = `${year}-W${String(week).padStart(2,'0')}`;
+}
+
+function getWeekNumber(d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+}
+
+async function loadWeeklyPostOptions() {
+  const r = await apiFetch('/api/posts'); if (!r) return;
+  const posts = await r.json();
+  const opts = posts.filter(p => !['Posted'].includes(p.status)).map(p => `<option value="${p.id}">${p.title} [${p.status}]</option>`).join('');
+  ['weekly-tue-id','weekly-thu-id','weekly-sun-id'].forEach(id => {
+    const sel = document.getElementById(id);
+    const val = sel.value;
+    sel.innerHTML = '<option value="">— Select Post —</option>' + opts;
+    sel.value = val;
+  });
+}
+
+async function loadWeeklyPlan() {
+  const wv = document.getElementById('week-picker').value;
+  if (!wv) return;
+  const [year, w] = wv.split('-W');
+  const weekOf = `${year}-W${w}`;
+  const r = await apiFetch('/api/weekly'); if (!r) return;
+  const weeks = await r.json();
+  const plan = weeks.find(w => w.week_of === weekOf);
+  if (plan) {
+    document.getElementById('weekly-tue-id').value = plan.tuesday_id || '';
+    document.getElementById('weekly-thu-id').value = plan.thursday_id || '';
+    document.getElementById('weekly-sun-id').value = plan.sunday_id || '';
+    document.getElementById('weekly-notes').value = plan.notes || '';
+    document.getElementById('weekly-status').value = plan.status || 'planning';
+    ['tue','thu','sun'].forEach(d => updateWeeklyPreview(d));
+  } else {
+    ['weekly-tue-id','weekly-thu-id','weekly-sun-id'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('weekly-notes').value = '';
+    document.getElementById('weekly-status').value = 'planning';
+    ['tue','thu','sun'].forEach(d => { document.getElementById('weekly-' + d + '-preview').textContent = 'No post selected'; });
+  }
+}
+
+function updateWeeklyPreview(day) {
+  const idMap = {tue:'weekly-tue-id',thu:'weekly-thu-id',sun:'weekly-sun-id'};
+  const sel = document.getElementById(idMap[day]);
+  const preview = document.getElementById('weekly-' + day + '-preview');
+  if (!sel.value) { preview.textContent = 'No post selected'; preview.style.color = 'var(--muted)'; return; }
+  const opt = sel.options[sel.selectedIndex];
+  preview.textContent = opt.text;
+  preview.style.color = 'var(--text)';
+}
+
+async function saveWeeklyPlan() {
+  const wv = document.getElementById('week-picker').value;
+  if (!wv) { toast('Select a week first', 'err'); return; }
+  const [year, w] = wv.split('-W');
+  const data = {
+    week_of: `${year}-W${w}`,
+    tuesday_id: document.getElementById('weekly-tue-id').value,
+    thursday_id: document.getElementById('weekly-thu-id').value,
+    sunday_id: document.getElementById('weekly-sun-id').value,
+    notes: document.getElementById('weekly-notes').value,
+    status: document.getElementById('weekly-status').value,
+  };
+  const r = await apiFetch('/api/weekly', { method: 'POST', body: JSON.stringify(data) });
+  if (!r || !r.ok) { toast('Save failed', 'err'); return; }
+  toast('Week saved');
+  loadWeeklyHistory();
+}
+
+async function loadWeeklyHistory() {
+  const r = await apiFetch('/api/weekly'); if (!r) return;
+  const weeks = await r.json();
+  const postsR = await apiFetch('/api/posts'); if (!postsR) return;
+  const posts = await postsR.json();
+  const pmap = {};
+  posts.forEach(p => pmap[p.id] = p.title);
+  document.getElementById('weekly-history-body').innerHTML = weeks.map(w => `
+    <tr onclick="selectWeek('${w.week_of}')" style="cursor:pointer;">
+      <td style="font-weight:500;">${w.week_of}</td>
+      <td style="color:var(--muted);font-size:12px;">${pmap[w.tuesday_id]||'—'}</td>
+      <td style="color:var(--muted);font-size:12px;">${pmap[w.thursday_id]||'—'}</td>
+      <td style="color:var(--muted);font-size:12px;">${pmap[w.sunday_id]||'—'}</td>
+      <td><span class="pill pill-${w.status==='done'?'ready':w.status==='locked'?'outline':'idea'}">${w.status}</span></td>
+    </tr>`).join('') || '<tr><td colspan="5" style="color:var(--muted);padding:20px;text-align:center;">No weekly plans yet</td></tr>';
+}
+
+function selectWeek(weekOf) {
+  const [year, w] = weekOf.split('-W');
+  document.getElementById('week-picker').value = `${year}-W${w}`;
+  loadWeeklyPlan();
+}
+
+// ── STRATEGY ──────────────────────────────────────────────────────────────────
+let allStrategy = [];
+async function loadStrategy() {
+  const r = await apiFetch('/api/strategy' + (strategyFilter ? '?type=' + strategyFilter : '')); if (!r) return;
+  allStrategy = await r.json();
+
+  const typeColors = { voice_rule:'var(--accent2)', hook:'var(--gold)', cta:'var(--green)', pillar:'var(--purple)' };
+  document.getElementById('strategy-grid').innerHTML = allStrategy.map(s => `
+    <div class="strategy-card" onclick="openStrategyModal('${s.id}')">
+      <div class="strategy-type" style="color:${typeColors[s.type]||'var(--muted)'};">${s.type.replace('_',' ')}</div>
+      <div class="strategy-title">${s.title}</div>
+      <div class="strategy-body">${s.body}</div>
+    </div>`).join('') || '<div style="color:var(--muted);padding:24px;">No items</div>';
+}
+
+function filterStrategy(type, btn) {
+  strategyFilter = type;
+  document.querySelectorAll('#panel-strategy .filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadStrategy();
+}
+
+function openStrategyModal(id = null) {
+  currentStrategyId = id;
+  document.getElementById('strategy-modal-title').textContent = id ? 'Edit Item' : 'New Strategy Item';
+  document.getElementById('strategy-delete-btn').style.display = id ? 'inline-flex' : 'none';
+  if (id) {
+    const s = allStrategy.find(s => s.id === id);
+    if (s) {
+      document.getElementById('s-type').value = s.type;
+      document.getElementById('s-title').value = s.title;
+      document.getElementById('s-body').value = s.body;
+    }
+  } else {
+    document.getElementById('s-type').value = 'voice_rule';
+    document.getElementById('s-title').value = '';
+    document.getElementById('s-body').value = '';
+  }
+  document.getElementById('strategy-modal').classList.add('open');
+}
+
+async function saveStrategy() {
+  const data = { type: document.getElementById('s-type').value, title: document.getElementById('s-title').value.trim(), body: document.getElementById('s-body').value };
+  if (!data.title) { toast('Title required', 'err'); return; }
+  const method = currentStrategyId ? 'PUT' : 'POST';
+  const url = currentStrategyId ? `/api/strategy/${currentStrategyId}` : '/api/strategy';
+  const r = await apiFetch(url, { method, body: JSON.stringify(data) });
+  if (!r || !r.ok) { toast('Save failed', 'err'); return; }
+  toast('Saved');
+  closeModal('strategy-modal');
+  loadStrategy();
+}
+
+async function deleteStrategy() {
+  if (!currentStrategyId || !confirm('Delete this item?')) return;
+  await apiFetch(`/api/strategy/${currentStrategyId}`, { method: 'DELETE' });
+  toast('Deleted');
+  closeModal('strategy-modal');
+  loadStrategy();
+}
+
+// ── ARCHIVE ───────────────────────────────────────────────────────────────────
+async function loadArchive() {
+  const series = document.getElementById('archive-series-filter').value;
+  let url = '/api/posts?status=Posted';
+  if (series) url += '&series=' + encodeURIComponent(series);
+  const r = await apiFetch(url); if (!r) return;
+  const posts = await r.json();
+  document.getElementById('archive-table-body').innerHTML = posts.map(p => `
+    <tr onclick="openPostModal('${p.id}')">
+      <td style="max-width:200px;font-weight:500;">${p.title}</td>
+      <td><span class="series-tag">${p.series||''}</span></td>
+      <td style="color:var(--muted);">${p.platform||''}</td>
+      <td style="color:var(--muted);">${p.posted_date||'—'}</td>
+      <td>${p.posted_link ? `<a href="${p.posted_link}" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent);">View</a>` : '—'}</td>
+      <td style="color:var(--muted);font-size:12px;max-width:180px;">${p.repurpose_opps||''}</td>
+      <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();openPostModal('${p.id}')">Edit</button></td>
+    </tr>`).join('') || '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:24px;">No posted content yet</td></tr>';
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+let searchTimeout = null;
+function triggerSearch(q) {
+  clearTimeout(searchTimeout);
+  if (!q.trim()) return;
+  searchTimeout = setTimeout(() => doSearch(q), 350);
+}
+
+async function doSearch(q) {
+  const r = await apiFetch('/api/search?q=' + encodeURIComponent(q)); if (!r) return;
+  const { posts, articles, strategy } = await r.json();
+  showPanel('search');
+  document.querySelector('#panel-search .toolbar span').textContent = `Search: "${q}"`;
+  document.getElementById('search-results').innerHTML = `
+    ${posts.length ? `<div class="search-result-section"><h3>Posts (${posts.length})</h3>${posts.map(p => `
+      <div class="search-result-item" onclick="openPostModal('${p.id}')">
+        <div style="font-weight:500;">${p.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${statusPill(p.status)} <span class="series-tag">${p.series}</span></div>
+      </div>`).join('')}</div>` : ''}
+    ${articles.length ? `<div class="search-result-section"><h3>Articles (${articles.length})</h3>${articles.map(a => `
+      <div class="search-result-item" onclick="openArticleModal('${a.id}')">
+        <div style="font-weight:500;">${a.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${statusPill(a.status)} <span class="series-tag">${a.series}</span></div>
+      </div>`).join('')}</div>` : ''}
+    ${strategy.length ? `<div class="search-result-section"><h3>Strategy (${strategy.length})</h3>${strategy.map(s => `
+      <div class="search-result-item" onclick="openStrategyModal('${s.id}')">
+        <div style="font-weight:500;">${s.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">${s.type.replace('_',' ')}</div>
+      </div>`).join('')}</div>` : ''}
+    ${!posts.length && !articles.length && !strategy.length ? '<div style="color:var(--muted);padding:40px;text-align:center;">No results found</div>' : ''}`;
+}
+
+// ── EXPORTS ───────────────────────────────────────────────────────────────────
+async function exportPosts() {
+  const r = await apiFetch('/api/export/posts'); if (!r) return;
+  const blob = await r.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'posts-export.json'; a.click();
+}
+async function exportArticles() {
+  const r = await apiFetch('/api/export/articles'); if (!r) return;
+  const blob = await r.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'articles-export.json'; a.click();
+}
+
+// ── MODAL UTILS ───────────────────────────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+function switchPostTab(tab, btn) {
+  ['core','content','publish'].forEach(t => document.getElementById('post-tab-' + t).style.display = t === tab ? '' : 'none');
+  document.querySelectorAll('#post-modal .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`#post-modal .tab-btn[onclick*="${tab}"]`).classList.add('active');
+}
+
+function switchArticleTab(tab, btn) {
+  ['core','draft','publish'].forEach(t => document.getElementById('article-tab-' + t).style.display = t === tab ? '' : 'none');
+  document.querySelectorAll('#article-modal .tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`#article-modal .tab-btn[onclick*="${tab}"]`).classList.add('active');
+}
+
+function charCount(el, countId, max) {
+  const n = el.value.length;
+  const cc = document.getElementById(countId);
+  if (!cc) return;
+  cc.textContent = `${n} / ${max}`;
+  cc.className = 'char-count' + (n > max ? ' char-over' : n > max * 0.85 ? ' char-warn' : '');
+}
+
+function refreshCurrentPanel() {
+  const active = document.querySelector('.panel.active');
+  if (!active) return;
+  const id = active.id.replace('panel-', '');
+  if (id === 'dashboard') loadDashboard();
+  else if (id === 'pipeline') loadPipeline();
+  else if (id === 'posts') loadPosts();
+  else if (id === 'archive') loadArchive();
+}
+</script>
+</body>
+</html>
