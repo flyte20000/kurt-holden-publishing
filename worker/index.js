@@ -174,6 +174,88 @@ export default {
       return json({ ok: true });
     }
 
+    // ── AI GENERATE ──────────────────────────────────────────────────────────
+    if (path === '/api/generate' && method === 'POST') {
+      const { series, paper_number, topic, key_points, style_notes } = body;
+      if (!topic) return err('Topic required');
+
+      const [voiceRows, hookRows, ctaRows] = await Promise.all([
+        db.prepare("SELECT title, body FROM strategy WHERE type='voice_rule' ORDER BY created_at ASC").all(),
+        db.prepare("SELECT title, body FROM strategy WHERE type='hook' ORDER BY created_at ASC").all(),
+        db.prepare("SELECT title, body FROM strategy WHERE type='cta' ORDER BY created_at ASC").all(),
+      ]);
+
+      const seriesMap = {
+        'Flight Path':            { day: 'Tuesday',  topics: 'AI, technology, future of aviation, flight departments of tomorrow, automation, future leadership' },
+        'Championship Operations':{ day: 'Thursday', topics: 'leadership, culture, accountability, execution, high performance, winning teams, championship mindset' },
+        'The Safety Margin':      { day: 'Sunday',   topics: 'SMS, human factors, risk management, learning organizations, decision making, safety culture, lessons learned' },
+      };
+      const si = seriesMap[series] || seriesMap['Flight Path'];
+
+      const fmt = rows => (rows.results || []).map(r => `• ${r.title}: ${r.body}`).join('\n');
+
+      const systemPrompt = `You are the writing assistant for Kurt Holden, a senior aviation executive building one of aviation's most respected publishing operations — The Kurt Holden Playbook.
+
+BRAND VOICE RULES:
+${fmt(voiceRows)}
+
+HOOK TECHNIQUES AVAILABLE:
+${fmt(hookRows)}
+
+CTA PATTERNS AVAILABLE:
+${fmt(ctaRows)}
+
+SERIES: ${series}${paper_number ? ' (' + paper_number + ')' : ''} — Published every ${si.day}
+SERIES TOPICS: ${si.topics}
+
+PUBLISHING STANDARDS — every post must:
+1. Build genuine authority in aviation leadership
+2. Teach something of lasting practical value
+3. Reflect the voice of an operator, not a marketer
+4. Meet the standard executives will reference and share
+5. Still have value five years from now
+
+FORMAT RULES:
+- Short mobile-friendly paragraphs (1-3 sentences max)
+- Open with the hook — do not restate the title
+- No bullet lists in the post body — flowing prose only
+- End with a single strong CTA or discussion question
+
+Return ONLY a valid JSON object — no markdown, no explanation:
+{"hook":"opening lines","content":"full body without hook","cta":"closing line or question","hashtags":"#tag1 #tag2 #tag3"}`;
+
+      const userPrompt = `Series: ${series}
+Topic: ${topic}
+Key Points:\n${key_points || '(use your judgment based on the topic)'}${style_notes ? '\nAdditional notes: ' + style_notes : ''}
+
+Write the complete post.`;
+
+      const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': env.ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 2048,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }],
+        }),
+      });
+
+      if (!aiResp.ok) return err('AI request failed: ' + (await aiResp.text()), 500);
+      const aiData = await aiResp.json();
+      const raw = aiData.content?.[0]?.text || '';
+      try {
+        const match = raw.match(/\{[\s\S]*\}/);
+        return json(match ? JSON.parse(match[0]) : { hook: '', content: raw, cta: '', hashtags: '' });
+      } catch {
+        return json({ hook: '', content: raw, cta: '', hashtags: '' });
+      }
+    }
+
     // ── SEARCH ────────────────────────────────────────────────────────────────
     if (path === '/api/search' && method === 'GET') {
       const q = (url.searchParams.get('q') || '').trim();

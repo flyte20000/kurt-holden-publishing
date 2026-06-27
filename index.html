@@ -498,6 +498,28 @@
       </div>
       <!-- Content tab -->
       <div id="post-tab-content" style="display:none;">
+        <!-- AI DRAFT PANEL -->
+        <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.3);border-radius:10px;padding:16px;margin-bottom:18px;">
+          <div style="font-size:12px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">AI Writing Assistant</div>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Topic / Angle</label>
+              <input class="form-input" id="ai-topic" placeholder="e.g. Why great operations are built on trust, not just procedures">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Key Points (one per line)</label>
+              <textarea class="form-textarea" id="ai-keypoints" rows="3" placeholder="- Checklist culture&#10;- Leaders set the standard&#10;- Accountability creates safety"></textarea>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Style Notes (optional)</label>
+              <input class="form-input" id="ai-style" placeholder="e.g. Open with a cockpit scenario, keep it under 1200 chars">
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:12px;">
+            <button class="btn btn-primary" onclick="generateDraft()" id="ai-gen-btn" style="background:#6366f1;">Generate Draft</button>
+            <span id="ai-status" style="font-size:12px;color:var(--muted);"></span>
+          </div>
+        </div>
         <div class="form-grid">
           <div class="form-group full">
             <label class="form-label">Hook / Opening Line</label>
@@ -1263,6 +1285,42 @@ async function doSearch(q) {
         <div style="font-size:12px;color:var(--muted);margin-top:4px;">${s.type.replace('_',' ')}</div>
       </div>`).join('')}</div>` : ''}
     ${!posts.length && !articles.length && !strategy.length ? '<div style="color:var(--muted);padding:40px;text-align:center;">No results found</div>' : ''}`;
+}
+
+// ── AI GENERATE ──────────────────────────────────────────────────────────────
+async function generateDraft() {
+  const topic = document.getElementById('ai-topic').value.trim();
+  if (!topic) { toast('Enter a topic first', 'err'); return; }
+  const btn = document.getElementById('ai-gen-btn');
+  const status = document.getElementById('ai-status');
+  btn.disabled = true; btn.textContent = 'Writing...';
+  status.textContent = 'Claude is drafting your post...';
+  try {
+    const r = await apiFetch('/api/generate', {
+      method: 'POST',
+      body: JSON.stringify({
+        series: document.getElementById('p-series').value,
+        paper_number: document.getElementById('p-volume-id').value,
+        topic,
+        key_points: document.getElementById('ai-keypoints').value,
+        style_notes: document.getElementById('ai-style').value,
+      })
+    });
+    if (!r || !r.ok) { toast('Generation failed', 'err'); return; }
+    const d = await r.json();
+    if (d.hook)     { document.getElementById('p-hook').value = d.hook; charCount(document.getElementById('p-hook'), 'hook-count', 220); }
+    if (d.content)  { document.getElementById('p-content').value = d.content; charCount(document.getElementById('p-content'), 'content-count', 3000); }
+    if (d.cta)      document.getElementById('p-cta').value = d.cta;
+    if (d.hashtags) document.getElementById('p-hashtags').value = d.hashtags;
+    status.textContent = 'Draft ready — review and edit below.';
+    status.style.color = 'var(--green)';
+    toast('Draft generated');
+  } catch(e) {
+    toast('Error: ' + e.message, 'err');
+    status.textContent = '';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Generate Draft';
+  }
 }
 
 // ── EXPORTS ───────────────────────────────────────────────────────────────────
