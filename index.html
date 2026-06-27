@@ -384,6 +384,7 @@
       <span style="font-size:18px;font-weight:700;">Strategy Library</span>
       <div style="display:flex;gap:6px;">
         <button class="filter-chip active" onclick="filterStrategy('',this)">All</button>
+        <button class="filter-chip" onclick="filterStrategy('plan',this)">Master Plan</button>
         <button class="filter-chip" onclick="filterStrategy('voice_rule',this)">Voice Rules</button>
         <button class="filter-chip" onclick="filterStrategy('hook',this)">Hooks</button>
         <button class="filter-chip" onclick="filterStrategy('cta',this)">CTAs</button>
@@ -643,6 +644,7 @@
         <div class="form-group">
           <label class="form-label">Type</label>
           <select class="form-select" id="s-type">
+            <option value="plan">Master Plan</option>
             <option value="voice_rule">Voice Rule</option>
             <option value="hook">Hook</option>
             <option value="cta">CTA</option>
@@ -1157,7 +1159,7 @@ async function loadStrategy() {
   const r = await apiFetch('/api/strategy' + (strategyFilter ? '?type=' + strategyFilter : '')); if (!r) return;
   allStrategy = await r.json();
 
-  const typeColors = { voice_rule:'var(--accent2)', hook:'var(--gold)', cta:'var(--green)', pillar:'var(--purple)' };
+  const typeColors = { plan:'var(--red)', voice_rule:'var(--accent2)', hook:'var(--gold)', cta:'var(--green)', pillar:'var(--purple)' };
   document.getElementById('strategy-grid').innerHTML = allStrategy.map(s => `
     <div class="strategy-card" onclick="openStrategyModal('${s.id}')">
       <div class="strategy-type" style="color:${typeColors[s.type]||'var(--muted)'};">${s.type.replace('_',' ')}</div>
