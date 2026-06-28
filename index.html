@@ -211,7 +211,7 @@
   .toast.err { border-color: var(--red); color: var(--red); }
 
   /* ── STUDIO LEG ──────────────────────────────────────────────────────────── */
-  :root { --studio-gold: #D4A017; --studio-navy: #0D1B2A; }
+  :root { --studio-gold: #DBA03D; --studio-navy: #0B1C2E; }
   .studio-rule { background: linear-gradient(135deg, rgba(212,160,23,0.1), rgba(212,160,23,0.04)); border: 1px solid rgba(212,160,23,0.35); border-radius: 14px; padding: 22px 28px; margin-bottom: 24px; text-align: center; }
   .studio-rule-text { font-size: 20px; font-weight: 800; color: var(--studio-gold); letter-spacing: 0.03em; line-height: 1.4; }
   .studio-rule-sub { font-size: 11px; color: var(--muted); margin-top: 8px; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -293,7 +293,7 @@
   /* Series preview */
   .series-preview-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
   .series-preview-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; text-align: center; }
-  .series-preview-kh { color: #D4A017; font-weight: 800; font-size: 14px; letter-spacing: 0.08em; }
+  .series-preview-kh { color: #DBA03D; font-weight: 800; font-size: 14px; letter-spacing: 0.08em; }
   .series-preview-sub { color: var(--text); font-size: 11px; margin-top: 3px; letter-spacing: 0.05em; }
   @media (max-width: 900px) { .color-swatches { flex-wrap: wrap; } .logo-grid { grid-template-columns: 1fr 1fr; } .files-grid { grid-template-columns: 1fr; } }
   @media (max-width: 600px) { .logo-grid { grid-template-columns: 1fr; } }
@@ -327,7 +327,7 @@
       <button class="nav-btn" onclick="showPanel('archive')">Archive</button>
       <a href="https://chatgpt.com" target="_blank" class="nav-btn" style="color:#10a37f;text-decoration:none;">ChatGPT</a>
       <a href="notes://" class="nav-btn" style="color:#f59e0b;text-decoration:none;">Notes</a>
-      <button class="nav-btn" onclick="showPanel('studio')" style="color:#D4A017;font-weight:600;">Studio</button>
+      <button class="nav-btn" onclick="showPanel('studio')" style="color:#DBA03D;font-weight:600;">Studio</button>
     </nav>
     <div class="header-right">
       <input class="search-box" type="text" placeholder="Search..." id="global-search" oninput="triggerSearch(this.value)">
@@ -519,10 +519,10 @@
   <!-- STUDIO -->
   <div class="panel" id="panel-studio">
     <div class="toolbar">
-      <span style="font-size:18px;font-weight:800;color:#D4A017;">Kurt Holden Studios</span>
+      <span style="font-size:18px;font-weight:800;color:#DBA03D;">Kurt Holden Studios</span>
       <span style="font-size:12px;color:var(--muted);margin-left:10px;padding-top:2px;">Official Brand Identity · v1.0</span>
       <div class="toolbar-spacer"></div>
-      <span class="studio-asset-badge">Vector Suite: Design in Progress</span>
+      <span class="studio-asset-badge" style="background:rgba(16,185,129,0.12);color:#10b981;border-color:rgba(16,185,129,0.3);">&#10003; Logo Suite v1.0 Complete</span>
     </div>
 
     <!-- Studio Sub-Nav -->
@@ -550,18 +550,21 @@
         <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Brand Kit</div><div class="roadmap-section">Strategy</div></div>
         <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Media System</div><div class="roadmap-section">Strategy</div></div>
         <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Logo System Specification</div><div class="roadmap-section">Brand Identity</div></div>
-        <div class="roadmap-card"><div class="roadmap-status s-progress">&#9679; Design in Progress</div><div class="roadmap-project">Vector Logo Suite</div><div class="roadmap-section">Brand Identity</div></div>
-        <div class="roadmap-card"><div class="roadmap-status s-progress">&#9679; Storyboard Complete</div><div class="roadmap-project">Cinematic Intro</div><div class="roadmap-section">Motion</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Vector Logo Suite v1.0</div><div class="roadmap-section">Brand Identity</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Director's Book v1.0</div><div class="roadmap-section">Motion</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Storyboard (9-Panel)</div><div class="roadmap-section">Motion</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Brand Kit + Media System</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-progress">&#9679; In Production</div><div class="roadmap-project">Cinematic Intro (10 sec)</div><div class="roadmap-section">Motion</div></div>
         <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Website</div><div class="roadmap-section">Publishing</div></div>
-        <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Publishing Dashboard</div><div class="roadmap-section">Publishing</div></div>
         <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Presentation System</div><div class="roadmap-section">Production</div></div>
       </div>
-      <div class="studio-section-title">Recommended Build Sequence</div>
+      <div class="studio-section-title">Current Build Sequence</div>
       <div class="phase-list">
-        <div class="phase-item"><div class="phase-num" style="background:rgba(212,160,23,0.15);color:#D4A017;border:1px solid rgba(212,160,23,0.35);">1</div><div><div class="phase-title">Finalize Vector Logo Suite</div><div class="phase-desc">Production-quality SVG/AI assets for all 10 logo variations — the foundation everything else is built on</div></div></div>
-        <div class="phase-item"><div class="phase-num" style="background:rgba(59,130,246,0.12);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">2</div><div><div class="phase-title">Build Website Design System</div><div class="phase-desc">Homepage, article pages, media pages, and navigation — the public face of the brand</div></div></div>
-        <div class="phase-item"><div class="phase-num" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid rgba(139,92,246,0.3);">3</div><div><div class="phase-title">Produce Cinematic Intro</div><div class="phase-desc">Using the completed production package — storyboards already finalized</div></div></div>
-        <div class="phase-item"><div class="phase-num" style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.3);">4</div><div><div class="phase-title">LinkedIn Publishing Templates</div><div class="phase-desc">One-click publishing templates for every article and post across all three series</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.35);">&#10003;</div><div><div class="phase-title" style="color:#10b981;">Vector Logo Suite — Complete</div><div class="phase-desc">All 10 logo variations designed. AI, SVG, PDF, PNG, JPG formats delivered.</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.35);">&#10003;</div><div><div class="phase-title" style="color:#10b981;">Director's Book + Storyboards — Complete</div><div class="phase-desc">7-scene, 10-second cinematic intro fully specified. 9-panel visual storyboard complete.</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(245,158,11,0.15);color:#DBA03D;border:1px solid rgba(245,158,11,0.35);">2</div><div><div class="phase-title">Produce Cinematic Intro</div><div class="phase-desc">10-second cinematic brand opener — all assets and specs ready for production</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(59,130,246,0.12);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">3</div><div><div class="phase-title">Build Website Design System</div><div class="phase-desc">Homepage, article pages, media pages, and navigation — the public face of the brand</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid rgba(139,92,246,0.3);">4</div><div><div class="phase-title">LinkedIn Publishing Templates</div><div class="phase-desc">One-click publishing templates for every article and post across all three series</div></div></div>
       </div>
     </div>
 
@@ -590,15 +593,15 @@
       </div>
       <div class="studio-section-title">Official Brand Colors</div>
       <div class="color-swatches">
-      <div class="color-swatch"><div class="swatch-block" style="background:#D4A017;"></div><div class="swatch-info"><div class="swatch-name">Sunrise Gold</div><div class="swatch-hex">#D4A017</div><div style="font-size:10px;color:var(--accent);margin-top:2px;">Primary Identity</div></div></div>
-      <div class="color-swatch"><div class="swatch-block" style="background:#F5F5F0;border-bottom:1px solid var(--border);"></div><div class="swatch-info"><div class="swatch-name">Executive White</div><div class="swatch-hex">#F5F5F0</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Typography</div></div></div>
-      <div class="color-swatch"><div class="swatch-block" style="background:#0D1B2A;"></div><div class="swatch-info"><div class="swatch-name">Midnight Navy</div><div class="swatch-hex">#0D1B2A</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Background</div></div></div>
-      <div class="color-swatch"><div class="swatch-block" style="background:#8A9099;"></div><div class="swatch-info"><div class="swatch-name">Titanium Silver</div><div class="swatch-hex">#8A9099</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Aircraft Accents</div></div></div>
-      <div class="color-swatch"><div class="swatch-block" style="background:#1A6BAF;"></div><div class="swatch-info"><div class="swatch-name">Flight Blue</div><div class="swatch-hex">#1A6BAF</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Operational Graphics</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#DBA03D;"></div><div class="swatch-info"><div class="swatch-name">Sunrise Gold</div><div class="swatch-hex">#DBA03D</div><div style="font-size:10px;color:var(--accent);margin-top:2px;">Primary Identity</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#F7F9FA;border-bottom:1px solid var(--border);"></div><div class="swatch-info"><div class="swatch-name">Executive White</div><div class="swatch-hex">#F7F9FA</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Typography</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#0B1C2E;"></div><div class="swatch-info"><div class="swatch-name">Midnight Navy</div><div class="swatch-hex">#0B1C2E</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Background</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#A7B1BB;"></div><div class="swatch-info"><div class="swatch-name">Titanium Silver</div><div class="swatch-hex">#A7B1BB</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Aircraft Accents</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#4DA6FF;"></div><div class="swatch-info"><div class="swatch-name">Flight Blue</div><div class="swatch-hex">#4DA6FF</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Operational Graphics</div></div></div>
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
-        <div class="spec-block"><div class="spec-block-title">Typography</div><div class="spec-block-body"><ul class="spec-list"><li>Modern geometric sans-serif</li><li>Wide tracking</li><li>Medium to SemiBold weight</li><li>Never condensed</li><li>Never decorative</li></ul></div></div>
+        <div class="spec-block"><div class="spec-block-title">Typography (Confirmed)</div><div class="spec-block-body"><ul class="spec-list"><li><strong>Headline (KURT HOLDEN):</strong> Montserrat Extra Bold</li><li><strong>Secondary (FLIGHT PATH):</strong> Montserrat Semi Bold</li><li><strong>Body copy:</strong> Open Sans Regular</li><li>Wide tracking throughout</li><li>Never condensed · Never decorative</li></ul></div></div>
         <div class="spec-block"><div class="spec-block-title">Background Rules</div><div class="spec-block-body"><div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:5px;">Preferred</div><ul class="spec-list"><li>Midnight Navy</li><li>Black</li><li>Dark aviation photography</li></ul><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin:10px 0 5px;">Secondary</div><ul class="spec-list"><li>White</li><li>Very light gray</li></ul><div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;margin:10px 0 5px;">Never</div><ul class="spec-list"><li>Busy backgrounds</li><li>Highly saturated colors</li><li>Patterns behind the logo</li></ul></div></div>
         <div class="spec-block"><div class="spec-block-title">Clear Space &amp; Minimum Size</div><div class="spec-block-body"><p style="font-weight:600;">Clear Space</p><p style="color:var(--muted);margin-top:5px;">Minimum equals the height of the "K" in KURT. No text or graphics may enter this area.</p><p style="margin-top:12px;font-weight:600;">Minimum Size</p><ul class="spec-list" style="margin-top:6px;"><li>Digital: 120px wide</li><li>Print: 1.25 inches wide</li></ul></div></div>
       </div>
@@ -632,7 +635,7 @@
       <div class="studio-section-title">Visual Asset Library &mdash; 6 Categories</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">
         <div class="asset-category-card"><div class="asset-cat-icon">PORTRAITS</div><div class="asset-cat-name">Executive Portraits</div><div class="asset-cat-desc">Professional photography for media kit, LinkedIn header, article bylines, and executive presentations.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
-        <div class="asset-category-card"><div class="asset-cat-icon">BRAND ASSETS</div><div class="asset-cat-name">Brand Asset Library</div><div class="asset-cat-desc">All logo files, color palettes, brand elements, and templates in all approved formats. Includes all 10 logo variations.</div><div class="asset-cat-status s-progress">&#9679; Design in Progress</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">BRAND ASSETS</div><div class="asset-cat-name">Brand Asset Library</div><div class="asset-cat-desc">All 10 logo variations complete. Delivered in AI, SVG, PDF, PNG, JPG. Color palette locked. Typography confirmed: Montserrat Extra Bold / Semi Bold / Open Sans.</div><div class="asset-cat-status s-complete">&#10003; Logo Suite v1.0 Complete</div></div>
         <div class="asset-category-card"><div class="asset-cat-icon">AIRCRAFT</div><div class="asset-cat-name">Aircraft Reference Library</div><div class="asset-cat-desc">Approved Global 8000 silhouettes and high-quality aviation photography cleared for brand use.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
         <div class="asset-category-card"><div class="asset-cat-icon">BACKGROUNDS</div><div class="asset-cat-name">Background Library</div><div class="asset-cat-desc">Midnight Navy textures, dark aviation photography, and approved presentation backgrounds for all content formats.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
         <div class="asset-category-card"><div class="asset-cat-icon">ICONS</div><div class="asset-cat-name">Icon Library</div><div class="asset-cat-desc">Custom icon set in Sunrise Gold for use across website, presentations, documents, and digital content.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
@@ -656,11 +659,11 @@
     <div class="studio-pane" id="studio-motion">
       <div class="studio-section-title">Motion &amp; Video Production &mdash; 05 Motion</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
-        <div class="doc-card"><div class="doc-status s-progress">&#9679; Storyboard Complete</div><div class="doc-name">Cinematic Intro Project</div><div class="doc-desc">Full-production cinematic brand intro for all video content. Storyboards finalized. Production pending logo finalization.</div></div>
-        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Storyboards</div><div class="doc-desc">Scene-by-scene visual breakdown of the cinematic intro and motion logo sequence. Ready for production handoff.</div></div>
+        <div class="doc-card"><div class="doc-status s-progress">&#9679; In Production</div><div class="doc-name">Cinematic Intro (10 sec)</div><div class="doc-desc">Director's Book v1.0 complete. 7 scenes specified. Bombardier Global 8000. Music: Cinematic · Epic · Modern · Inspiring. All assets ready for production.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Director's Book v1.0</div><div class="doc-desc">Full production document — 7 scenes, timing, camera, audio, and notes. Scenes: The Awakening · Recognition · Impact · Flyover · Climb · Intelligence Overlay · Brand Reveal.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Storyboard (9-Panel)</div><div class="doc-desc">Second-by-second visual narrative: "The light appears. It grows closer. Then it breaks through. Over you. Into the future. Data. Insight. Intelligence. The next article begins."</div></div>
         <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Shot Lists</div><div class="doc-desc">Camera angles, composition guides, and production notes for all video shoots including b-roll and executive segments.</div></div>
-        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Sound Design</div><div class="doc-desc">Audio identity system — music selection, sound effects, voice treatment standards, and cinematic audio mix.</div></div>
-        <div class="doc-card"><div class="doc-status s-progress">&#9679; Design in Progress</div><div class="doc-name">Motion Logo (Logo 10)</div><div class="doc-desc">6-second animated logo. Gold flight path draws, aircraft follows, KURT HOLDEN fades in. Awaiting finalized vector files.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Sound Design</div><div class="doc-desc">Audio identity — faint turbine spool → runway hum → bass note → engine roar → flyover hit → wind rush → cinematic music opens → resolves to inspiring tone → final whoosh.</div></div>
       </div>
     </div>
 
