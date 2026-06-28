@@ -209,6 +209,29 @@
   .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--green); border-radius: 10px; padding: 12px 20px; font-size: 13px; color: var(--green); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; }
   .toast.err { border-color: var(--red); color: var(--red); }
+
+  /* ── STUDIO LEG ──────────────────────────────────────────────────────────── */
+  :root { --studio-gold: #D4A017; --studio-navy: #0D1B2A; }
+  .studio-rule { background: linear-gradient(135deg, rgba(212,160,23,0.1), rgba(212,160,23,0.04)); border: 1px solid rgba(212,160,23,0.35); border-radius: 14px; padding: 22px 28px; margin-bottom: 24px; text-align: center; }
+  .studio-rule-text { font-size: 20px; font-weight: 800; color: var(--studio-gold); letter-spacing: 0.03em; line-height: 1.4; }
+  .studio-rule-sub { font-size: 11px; color: var(--muted); margin-top: 8px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .studio-section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+  .color-swatches { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .color-swatch { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); width: 118px; flex-shrink: 0; }
+  .swatch-block { height: 56px; }
+  .swatch-info { background: var(--surface); padding: 8px 10px; }
+  .swatch-name { font-size: 12px; font-weight: 600; }
+  .swatch-hex { font-size: 11px; color: var(--muted); font-family: monospace; margin-top: 2px; }
+  .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .logo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; transition: border-color 0.15s; }
+  .logo-card:hover { border-color: var(--studio-gold); }
+  .logo-card-id { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--studio-gold); margin-bottom: 8px; }
+  .logo-card-name { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .logo-card-uses { font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .logo-placeholder { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; height: 78px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: 0.05em; }
+  .studio-asset-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(212,160,23,0.12); color: var(--studio-gold); border: 1px solid rgba(212,160,23,0.25); }
+  @media (max-width: 900px) { .color-swatches { flex-wrap: wrap; } .logo-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .logo-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -239,6 +262,7 @@
       <button class="nav-btn" onclick="showPanel('archive')">Archive</button>
       <a href="https://chatgpt.com" target="_blank" class="nav-btn" style="color:#10a37f;text-decoration:none;">ChatGPT</a>
       <a href="notes://" class="nav-btn" style="color:#f59e0b;text-decoration:none;">Notes</a>
+      <button class="nav-btn" onclick="showPanel('studio')" style="color:#D4A017;font-weight:600;">Studio</button>
     </nav>
     <div class="header-right">
       <input class="search-box" type="text" placeholder="Search..." id="global-search" oninput="triggerSearch(this.value)">
@@ -426,6 +450,123 @@
     <div id="search-results"></div>
   </div>
 </div>
+
+  <!-- STUDIO -->
+  <div class="panel" id="panel-studio">
+    <div class="toolbar">
+      <span style="font-size:18px;font-weight:800;color:#D4A017;">Kurt Holden Studios</span>
+      <span style="font-size:12px;color:var(--muted);margin-left:10px;padding-top:2px;">Official Brand Identity · v1.0</span>
+      <div class="toolbar-spacer"></div>
+      <span class="studio-asset-badge">Logo Files: Pending Upload</span>
+    </div>
+
+    <!-- Master Rule -->
+    <div class="studio-rule">
+      <div class="studio-rule-text">"KURT HOLDEN" &mdash; Always Gold. Always. Everywhere. No exceptions.</div>
+      <div class="studio-rule-sub">Master Brand Rule &nbsp;·&nbsp; Kurt Holden Studios &nbsp;·&nbsp; Official Vector Logo Suite v1.0</div>
+    </div>
+
+    <!-- Brand Colors -->
+    <div class="studio-section-title">Official Brand Colors</div>
+    <div class="color-swatches">
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#D4A017;"></div>
+        <div class="swatch-info"><div class="swatch-name">Sunrise Gold</div><div class="swatch-hex">#D4A017</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#F5F5F0;border-bottom:1px solid var(--border);"></div>
+        <div class="swatch-info"><div class="swatch-name">Executive White</div><div class="swatch-hex">#F5F5F0</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#0D1B2A;"></div>
+        <div class="swatch-info"><div class="swatch-name">Midnight Navy</div><div class="swatch-hex">#0D1B2A</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#8A9099;"></div>
+        <div class="swatch-info"><div class="swatch-name">Titanium Silver</div><div class="swatch-hex">#8A9099</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block" style="background:#1A6BAF;"></div>
+        <div class="swatch-info"><div class="swatch-name">Flight Blue</div><div class="swatch-hex">#1A6BAF</div></div>
+      </div>
+    </div>
+
+    <!-- Logo Suite -->
+    <div class="studio-section-title">Official Logo Suite &mdash; 10 Variations</div>
+    <div class="logo-grid">
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 01 &nbsp;·&nbsp; Master</div>
+        <div class="logo-placeholder">[ Master Logo ]</div>
+        <div class="logo-card-name">Master Logo</div>
+        <div class="logo-card-uses">Primary brand mark. KURT HOLDEN in Sunrise Gold · FLIGHT PATH in Executive White · Gold divider · Global 8000 signature aircraft · Tagline: Safety · Service · Value</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 02 &nbsp;·&nbsp; Horizontal Executive</div>
+        <div class="logo-placeholder">[ Horizontal Executive ]</div>
+        <div class="logo-card-name">Horizontal Executive</div>
+        <div class="logo-card-uses">Website header · Letterhead · LinkedIn Banner</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 03 &nbsp;·&nbsp; Stacked Executive</div>
+        <div class="logo-placeholder">[ Stacked Executive ]</div>
+        <div class="logo-card-name">Stacked Executive</div>
+        <div class="logo-card-uses">Magazine covers · Article covers · Presentation openers · Book covers</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 04 &nbsp;·&nbsp; Executive Seal</div>
+        <div class="logo-placeholder">[ Executive Seal ]</div>
+        <div class="logo-card-name">Executive Seal</div>
+        <div class="logo-card-uses">Circular mark. Outer ring: KURT HOLDEN · Inner ring: LEADING THE FUTURE OF AVIATION · Center: Global 8000. Official documents, formal use.</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 05 &nbsp;·&nbsp; KH Monogram</div>
+        <div class="logo-placeholder">[ KH Monogram ]</div>
+        <div class="logo-card-name">KH Monogram</div>
+        <div class="logo-card-uses">Profile image · Watermark · Podcast · Social avatar · Website favicon. Aircraft completes the gold circle.</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 06 &nbsp;·&nbsp; Signature</div>
+        <div class="logo-placeholder">[ Signature Logo ]</div>
+        <div class="logo-card-name">Signature Logo</div>
+        <div class="logo-card-uses">Handwritten Kurt Holden signature in Gold with minimal aircraft. Books · Letters · Personal notes · Special editions</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 07 &nbsp;·&nbsp; Embossed</div>
+        <div class="logo-placeholder">[ Embossed Version ]</div>
+        <div class="logo-card-name">Embossed Version</div>
+        <div class="logo-card-uses">Monochrome, no gradients. Luxury appearance. Leather portfolios · Presentation folders · Embroidery</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 08 &nbsp;·&nbsp; Dark Mode</div>
+        <div class="logo-placeholder" style="background:#0a0c10;">[ Dark Mode ]</div>
+        <div class="logo-card-name">Dark Mode</div>
+        <div class="logo-card-uses">Gold + White on transparent. Optimized for dark backgrounds, screens, and digital use.</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 09 &nbsp;·&nbsp; Light Mode</div>
+        <div class="logo-placeholder" style="background:#F0F0EC;color:#555;">[ Light Mode ]</div>
+        <div class="logo-card-name">Light Mode</div>
+        <div class="logo-card-uses">Navy + Gold on white background. Print, light-themed digital, and editorial use.</div>
+      </div>
+
+      <div class="logo-card">
+        <div class="logo-card-id">Logo 10 &nbsp;·&nbsp; Motion</div>
+        <div class="logo-placeholder">[ Motion Logo &nbsp;·&nbsp; 6 sec ]</div>
+        <div class="logo-card-name">Motion Logo</div>
+        <div class="logo-card-uses">6-second animated sequence: Gold flight path draws · Aircraft follows · KURT HOLDEN fades in · FLIGHT PATH appears · Tagline hold · Fade out. Video intros and reels.</div>
+      </div>
+
+    </div>
+  </div>
 
 <!-- POST MODAL -->
 <div class="modal-overlay" id="post-modal">
