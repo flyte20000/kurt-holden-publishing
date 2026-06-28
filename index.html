@@ -230,7 +230,72 @@
   .logo-card-uses { font-size: 12px; color: var(--muted); line-height: 1.55; }
   .logo-placeholder { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; height: 78px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; color: var(--muted); font-size: 11px; letter-spacing: 0.05em; }
   .studio-asset-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(212,160,23,0.12); color: var(--studio-gold); border: 1px solid rgba(212,160,23,0.25); }
-  @media (max-width: 900px) { .color-swatches { flex-wrap: wrap; } .logo-grid { grid-template-columns: 1fr 1fr; } }
+  /* Studio sub-tabs */
+  .studio-tabs { display: flex; gap: 2px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 0; overflow-x: auto; }
+  .studio-tab { background: none; border: none; color: var(--muted); padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; transition: color 0.15s; }
+  .studio-tab:hover { color: var(--text); }
+  .studio-tab.active { color: var(--studio-gold); border-bottom-color: var(--studio-gold); font-weight: 600; }
+  .studio-pane { display: none; }
+  .studio-pane.active { display: block; }
+  /* Roadmap */
+  .roadmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .roadmap-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .roadmap-status { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 7px; }
+  .roadmap-status.s-complete { color: var(--green); }
+  .roadmap-status.s-progress { color: var(--studio-gold); }
+  .roadmap-status.s-planned { color: var(--muted); }
+  .roadmap-project { font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .roadmap-section { font-size: 11px; color: var(--muted); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
+  /* Phase list */
+  .phase-list { display: flex; flex-direction: column; gap: 10px; }
+  .phase-item { display: flex; align-items: flex-start; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .phase-title { font-size: 14px; font-weight: 700; }
+  .phase-desc { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  /* Spec blocks */
+  .spec-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+  .spec-block-title { padding: 11px 16px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .spec-block-body { padding: 16px; font-size: 13px; line-height: 1.6; color: var(--text); }
+  .spec-block-body p { margin: 0; }
+  .spec-list { list-style: none; padding: 0; margin: 0; }
+  .spec-list li { padding: 3px 0; color: var(--muted); font-size: 13px; }
+  .spec-list li::before { content: '· '; color: var(--studio-gold); }
+  .spec-uses { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .spec-use-chip { background: rgba(212,160,23,0.08); border: 1px solid rgba(212,160,23,0.2); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--studio-gold); }
+  /* Quality checklist */
+  .quality-checklist { display: flex; flex-direction: column; gap: 8px; }
+  .quality-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .quality-item::before { content: '□'; color: var(--studio-gold); font-size: 16px; }
+  /* Animation steps */
+  .anim-steps { display: flex; flex-direction: column; gap: 8px; }
+  .anim-step { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .anim-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(212,160,23,0.15); border: 1px solid rgba(212,160,23,0.3); color: var(--studio-gold); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  /* Files grid */
+  .files-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .file-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--studio-gold); margin-bottom: 4px; }
+  /* Asset category cards */
+  .asset-category-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .asset-cat-icon { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--studio-gold); margin-bottom: 10px; }
+  .asset-cat-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .asset-cat-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+  .asset-cat-status { font-size: 11px; font-weight: 700; }
+  .asset-cat-status.s-complete { color: var(--green); }
+  .asset-cat-status.s-progress { color: var(--studio-gold); }
+  .asset-cat-status.s-planned { color: var(--muted); }
+  /* Doc cards */
+  .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .doc-status { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+  .doc-status.s-complete { color: var(--green); }
+  .doc-status.s-progress { color: var(--studio-gold); }
+  .doc-status.s-planned { color: var(--muted); }
+  .doc-name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .doc-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  /* Series preview */
+  .series-preview-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .series-preview-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; text-align: center; }
+  .series-preview-kh { color: #D4A017; font-weight: 800; font-size: 14px; letter-spacing: 0.08em; }
+  .series-preview-sub { color: var(--text); font-size: 11px; margin-top: 3px; letter-spacing: 0.05em; }
+  @media (max-width: 900px) { .color-swatches { flex-wrap: wrap; } .logo-grid { grid-template-columns: 1fr 1fr; } .files-grid { grid-template-columns: 1fr; } }
   @media (max-width: 600px) { .logo-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -457,115 +522,160 @@
       <span style="font-size:18px;font-weight:800;color:#D4A017;">Kurt Holden Studios</span>
       <span style="font-size:12px;color:var(--muted);margin-left:10px;padding-top:2px;">Official Brand Identity · v1.0</span>
       <div class="toolbar-spacer"></div>
-      <span class="studio-asset-badge">Logo Files: Pending Upload</span>
+      <span class="studio-asset-badge">Vector Suite: Design in Progress</span>
     </div>
 
-    <!-- Master Rule -->
-    <div class="studio-rule">
-      <div class="studio-rule-text">"KURT HOLDEN" &mdash; Always Gold. Always. Everywhere. No exceptions.</div>
-      <div class="studio-rule-sub">Master Brand Rule &nbsp;·&nbsp; Kurt Holden Studios &nbsp;·&nbsp; Official Vector Logo Suite v1.0</div>
+    <!-- Studio Sub-Nav -->
+    <div class="studio-tabs">
+      <button class="studio-tab active" onclick="showStudioTab('roadmap',this)">Roadmap</button>
+      <button class="studio-tab" onclick="showStudioTab('brand',this)">Brand Identity</button>
+      <button class="studio-tab" onclick="showStudioTab('logos',this)">Logo Suite</button>
+      <button class="studio-tab" onclick="showStudioTab('assets',this)">Visual Assets</button>
+      <button class="studio-tab" onclick="showStudioTab('strategy',this)">Strategy</button>
+      <button class="studio-tab" onclick="showStudioTab('motion',this)">Motion</button>
+      <button class="studio-tab" onclick="showStudioTab('production',this)">Production</button>
     </div>
 
-    <!-- Brand Colors -->
-    <div class="studio-section-title">Official Brand Colors</div>
-    <div class="color-swatches">
-      <div class="color-swatch">
-        <div class="swatch-block" style="background:#D4A017;"></div>
-        <div class="swatch-info"><div class="swatch-name">Sunrise Gold</div><div class="swatch-hex">#D4A017</div></div>
+    <!-- ── TAB: ROADMAP ───────────────────────────────────────────────────── -->
+    <div class="studio-pane active" id="studio-roadmap">
+      <div class="studio-rule">
+        <div class="studio-rule-text">"KURT HOLDEN" &mdash; Always Gold. Always. Everywhere. No exceptions.</div>
+        <div class="studio-rule-sub">Master Brand Rule &nbsp;·&nbsp; Kurt Holden Studios &nbsp;·&nbsp; Official Brand Identity v1.0</div>
       </div>
-      <div class="color-swatch">
-        <div class="swatch-block" style="background:#F5F5F0;border-bottom:1px solid var(--border);"></div>
-        <div class="swatch-info"><div class="swatch-name">Executive White</div><div class="swatch-hex">#F5F5F0</div></div>
+      <div class="studio-section-title">Studio Roadmap &mdash; Project Status</div>
+      <div class="roadmap-grid">
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Studio Visual Bible</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Studio Production Bible</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Flight Path Brand Playbook</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Brand Kit</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Media System</div><div class="roadmap-section">Strategy</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-complete">&#10003; Complete</div><div class="roadmap-project">Logo System Specification</div><div class="roadmap-section">Brand Identity</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-progress">&#9679; Design in Progress</div><div class="roadmap-project">Vector Logo Suite</div><div class="roadmap-section">Brand Identity</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-progress">&#9679; Storyboard Complete</div><div class="roadmap-project">Cinematic Intro</div><div class="roadmap-section">Motion</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Website</div><div class="roadmap-section">Publishing</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Publishing Dashboard</div><div class="roadmap-section">Publishing</div></div>
+        <div class="roadmap-card"><div class="roadmap-status s-planned">&#9675; Planned</div><div class="roadmap-project">Presentation System</div><div class="roadmap-section">Production</div></div>
       </div>
-      <div class="color-swatch">
-        <div class="swatch-block" style="background:#0D1B2A;"></div>
-        <div class="swatch-info"><div class="swatch-name">Midnight Navy</div><div class="swatch-hex">#0D1B2A</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch-block" style="background:#8A9099;"></div>
-        <div class="swatch-info"><div class="swatch-name">Titanium Silver</div><div class="swatch-hex">#8A9099</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch-block" style="background:#1A6BAF;"></div>
-        <div class="swatch-info"><div class="swatch-name">Flight Blue</div><div class="swatch-hex">#1A6BAF</div></div>
+      <div class="studio-section-title">Recommended Build Sequence</div>
+      <div class="phase-list">
+        <div class="phase-item"><div class="phase-num" style="background:rgba(212,160,23,0.15);color:#D4A017;border:1px solid rgba(212,160,23,0.35);">1</div><div><div class="phase-title">Finalize Vector Logo Suite</div><div class="phase-desc">Production-quality SVG/AI assets for all 10 logo variations — the foundation everything else is built on</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(59,130,246,0.12);color:#3b82f6;border:1px solid rgba(59,130,246,0.3);">2</div><div><div class="phase-title">Build Website Design System</div><div class="phase-desc">Homepage, article pages, media pages, and navigation — the public face of the brand</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(139,92,246,0.12);color:#8b5cf6;border:1px solid rgba(139,92,246,0.3);">3</div><div><div class="phase-title">Produce Cinematic Intro</div><div class="phase-desc">Using the completed production package — storyboards already finalized</div></div></div>
+        <div class="phase-item"><div class="phase-num" style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.3);">4</div><div><div class="phase-title">LinkedIn Publishing Templates</div><div class="phase-desc">One-click publishing templates for every article and post across all three series</div></div></div>
       </div>
     </div>
 
-    <!-- Logo Suite -->
-    <div class="studio-section-title">Official Logo Suite &mdash; 10 Variations</div>
-    <div class="logo-grid">
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 01 &nbsp;·&nbsp; Master</div>
-        <div class="logo-placeholder">[ Master Logo ]</div>
-        <div class="logo-card-name">Master Logo</div>
-        <div class="logo-card-uses">Primary brand mark. KURT HOLDEN in Sunrise Gold · FLIGHT PATH in Executive White · Gold divider · Global 8000 signature aircraft · Tagline: Safety · Service · Value</div>
+    <!-- ── TAB: BRAND IDENTITY ────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-brand">
+      <div class="studio-rule">
+        <div class="studio-rule-text">"KURT HOLDEN" is ALWAYS displayed in Sunrise Gold. No alternate colors. No exceptions.</div>
+        <div class="studio-rule-sub">Flight Path remains Executive White &nbsp;·&nbsp; This creates immediate recognition across every platform</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="spec-block">
+          <div class="spec-block-title">The Signature System &mdash; The Gold Flight Path</div>
+          <div class="spec-block-body"><p>One continuous gold line ending with a refined Global 8000 silhouette. Not just in the logo — it appears everywhere across the brand. Think of it like the FedEx arrow: once you see it, you can't unsee it.</p></div>
+          <div class="spec-uses">
+            <div class="spec-use-chip">Website section dividers</div><div class="spec-use-chip">Video lower thirds</div><div class="spec-use-chip">Presentation transitions</div><div class="spec-use-chip">Page numbers</div><div class="spec-use-chip">Watermarks</div><div class="spec-use-chip">Email signatures</div><div class="spec-use-chip">Social graphics</div><div class="spec-use-chip">Business cards</div><div class="spec-use-chip">Closing slides</div>
+          </div>
+        </div>
+        <div class="spec-block">
+          <div class="spec-block-title">Brand Philosophy</div>
+          <div class="spec-block-body">
+            <p>The aircraft <em>supports</em> the brand. It does not <em>become</em> the brand. This brand communicates:</p>
+            <ul class="spec-list" style="margin-top:10px;"><li>Executive Leadership</li><li>Aviation Excellence</li><li>Innovation &amp; Precision</li><li>Trust &amp; Timeless Design</li></ul>
+            <p style="margin-top:12px;">The logo should feel equally at home beside Bombardier, NBAA, Apple, or a Fortune 500 executive presentation.</p>
+          </div>
+        </div>
+      </div>
+      <div class="studio-section-title">Official Brand Colors</div>
+      <div class="color-swatches">
+      <div class="color-swatch"><div class="swatch-block" style="background:#D4A017;"></div><div class="swatch-info"><div class="swatch-name">Sunrise Gold</div><div class="swatch-hex">#D4A017</div><div style="font-size:10px;color:var(--accent);margin-top:2px;">Primary Identity</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#F5F5F0;border-bottom:1px solid var(--border);"></div><div class="swatch-info"><div class="swatch-name">Executive White</div><div class="swatch-hex">#F5F5F0</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Typography</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#0D1B2A;"></div><div class="swatch-info"><div class="swatch-name">Midnight Navy</div><div class="swatch-hex">#0D1B2A</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Background</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#8A9099;"></div><div class="swatch-info"><div class="swatch-name">Titanium Silver</div><div class="swatch-hex">#8A9099</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Aircraft Accents</div></div></div>
+      <div class="color-swatch"><div class="swatch-block" style="background:#1A6BAF;"></div><div class="swatch-info"><div class="swatch-name">Flight Blue</div><div class="swatch-hex">#1A6BAF</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">Operational Graphics</div></div></div>
       </div>
 
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 02 &nbsp;·&nbsp; Horizontal Executive</div>
-        <div class="logo-placeholder">[ Horizontal Executive ]</div>
-        <div class="logo-card-name">Horizontal Executive</div>
-        <div class="logo-card-uses">Website header · Letterhead · LinkedIn Banner</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div class="spec-block"><div class="spec-block-title">Typography</div><div class="spec-block-body"><ul class="spec-list"><li>Modern geometric sans-serif</li><li>Wide tracking</li><li>Medium to SemiBold weight</li><li>Never condensed</li><li>Never decorative</li></ul></div></div>
+        <div class="spec-block"><div class="spec-block-title">Background Rules</div><div class="spec-block-body"><div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:5px;">Preferred</div><ul class="spec-list"><li>Midnight Navy</li><li>Black</li><li>Dark aviation photography</li></ul><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin:10px 0 5px;">Secondary</div><ul class="spec-list"><li>White</li><li>Very light gray</li></ul><div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;margin:10px 0 5px;">Never</div><ul class="spec-list"><li>Busy backgrounds</li><li>Highly saturated colors</li><li>Patterns behind the logo</li></ul></div></div>
+        <div class="spec-block"><div class="spec-block-title">Clear Space &amp; Minimum Size</div><div class="spec-block-body"><p style="font-weight:600;">Clear Space</p><p style="color:var(--muted);margin-top:5px;">Minimum equals the height of the "K" in KURT. No text or graphics may enter this area.</p><p style="margin-top:12px;font-weight:600;">Minimum Size</p><ul class="spec-list" style="margin-top:6px;"><li>Digital: 120px wide</li><li>Print: 1.25 inches wide</li></ul></div></div>
       </div>
 
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 03 &nbsp;·&nbsp; Stacked Executive</div>
-        <div class="logo-placeholder">[ Stacked Executive ]</div>
-        <div class="logo-card-name">Stacked Executive</div>
-        <div class="logo-card-uses">Magazine covers · Article covers · Presentation openers · Book covers</div>
-      </div>
+      <div class="spec-block" style="margin-bottom:14px;"><div class="spec-block-title">Series Identifiers &mdash; Same Master Logo, Only Subtitle Changes</div><div class="spec-block-body"><p style="color:var(--muted);">Typography, spacing, aircraft icon, and gold treatment remain identical across all series.</p><div class="series-preview-bar"><div class="series-preview-box"><div class="series-preview-kh">KURT HOLDEN</div><div class="series-preview-sub">FLIGHT PATH</div></div><div class="series-preview-box"><div class="series-preview-kh">KURT HOLDEN</div><div class="series-preview-sub">CHAMPIONSHIP OPERATIONS</div></div><div class="series-preview-box"><div class="series-preview-kh">KURT HOLDEN</div><div class="series-preview-sub">THE SAFETY MARGIN</div></div></div></div></div>
 
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 04 &nbsp;·&nbsp; Executive Seal</div>
-        <div class="logo-placeholder">[ Executive Seal ]</div>
-        <div class="logo-card-name">Executive Seal</div>
-        <div class="logo-card-uses">Circular mark. Outer ring: KURT HOLDEN · Inner ring: LEADING THE FUTURE OF AVIATION · Center: Global 8000. Official documents, formal use.</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 05 &nbsp;·&nbsp; KH Monogram</div>
-        <div class="logo-placeholder">[ KH Monogram ]</div>
-        <div class="logo-card-name">KH Monogram</div>
-        <div class="logo-card-uses">Profile image · Watermark · Podcast · Social avatar · Website favicon. Aircraft completes the gold circle.</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 06 &nbsp;·&nbsp; Signature</div>
-        <div class="logo-placeholder">[ Signature Logo ]</div>
-        <div class="logo-card-name">Signature Logo</div>
-        <div class="logo-card-uses">Handwritten Kurt Holden signature in Gold with minimal aircraft. Books · Letters · Personal notes · Special editions</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 07 &nbsp;·&nbsp; Embossed</div>
-        <div class="logo-placeholder">[ Embossed Version ]</div>
-        <div class="logo-card-name">Embossed Version</div>
-        <div class="logo-card-uses">Monochrome, no gradients. Luxury appearance. Leather portfolios · Presentation folders · Embroidery</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 08 &nbsp;·&nbsp; Dark Mode</div>
-        <div class="logo-placeholder" style="background:#0a0c10;">[ Dark Mode ]</div>
-        <div class="logo-card-name">Dark Mode</div>
-        <div class="logo-card-uses">Gold + White on transparent. Optimized for dark backgrounds, screens, and digital use.</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 09 &nbsp;·&nbsp; Light Mode</div>
-        <div class="logo-placeholder" style="background:#F0F0EC;color:#555;">[ Light Mode ]</div>
-        <div class="logo-card-name">Light Mode</div>
-        <div class="logo-card-uses">Navy + Gold on white background. Print, light-themed digital, and editorial use.</div>
-      </div>
-
-      <div class="logo-card">
-        <div class="logo-card-id">Logo 10 &nbsp;·&nbsp; Motion</div>
-        <div class="logo-placeholder">[ Motion Logo &nbsp;·&nbsp; 6 sec ]</div>
-        <div class="logo-card-name">Motion Logo</div>
-        <div class="logo-card-uses">6-second animated sequence: Gold flight path draws · Aircraft follows · KURT HOLDEN fades in · FLIGHT PATH appears · Tagline hold · Fade out. Video intros and reels.</div>
-      </div>
-
+      <div class="spec-block"><div class="spec-block-title">Quality Standard &mdash; Before Approving Any Logo Application</div><div class="spec-block-body"><div class="quality-checklist"><div class="quality-item">Is the gold consistent?</div><div class="quality-item">Is the spacing correct?</div><div class="quality-item">Does it feel premium?</div><div class="quality-item">Does it look timeless?</div><div class="quality-item">Would it belong on an executive presentation or a business jet livery?</div></div><p style="margin-top:16px;color:var(--red);font-size:13px;font-weight:600;">If the answer to any question is "no" — it is not approved for use.</p></div></div>
     </div>
+
+    <!-- ── TAB: LOGO SUITE ────────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-logos">
+      <div class="studio-rule"><div class="studio-rule-text">"KURT HOLDEN" &mdash; Always Gold. Always. Everywhere. No exceptions.</div><div class="studio-rule-sub">Official Vector Logo Suite v1.0 &nbsp;·&nbsp; 10 Approved Variations</div></div>
+      <div class="logo-grid" style="margin-bottom:24px;">
+        <div class="logo-card"><div class="logo-card-id">Logo 01 &nbsp;·&nbsp; Master</div><div class="logo-placeholder">[ Master Logo ]</div><div class="logo-card-name">Master Logo</div><div class="logo-card-uses">Primary brand mark. KURT HOLDEN in Sunrise Gold · FLIGHT PATH in Executive White · Gold flight path divider · Global 8000 aircraft · Tagline: Safety · Service · Value</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 02 &nbsp;·&nbsp; Horizontal Executive</div><div class="logo-placeholder">[ Horizontal Executive ]</div><div class="logo-card-name">Horizontal Executive</div><div class="logo-card-uses">Website header · Letterhead · LinkedIn Banner · Email headers · Video lower thirds · Business cards</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 03 &nbsp;·&nbsp; Stacked Executive</div><div class="logo-placeholder">[ Stacked Executive ]</div><div class="logo-card-name">Stacked Executive</div><div class="logo-card-uses">Magazine covers · Article covers · Presentation openers · Book covers · LinkedIn covers</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 04 &nbsp;·&nbsp; Executive Seal</div><div class="logo-placeholder">[ Executive Seal ]</div><div class="logo-card-name">Executive Seal</div><div class="logo-card-uses">Circular. Outer: KURT HOLDEN · Inner: LEADING THE FUTURE OF AVIATION · Center: Global 8000. Certificates, white papers, reports, media kit, closing slides.</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 05 &nbsp;·&nbsp; KH Monogram</div><div class="logo-placeholder">[ KH Monogram ]</div><div class="logo-card-name">KH Monogram</div><div class="logo-card-uses">Profile image · Watermark · Podcast · Social avatar · Website favicon · App icon. Aircraft completes the gold circle.</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 06 &nbsp;·&nbsp; Signature</div><div class="logo-placeholder">[ Signature Logo ]</div><div class="logo-card-name">Signature Logo</div><div class="logo-card-uses">Handwritten Kurt Holden signature in Gold with minimal aircraft. Books · Letters · Personal notes · Special editions</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 07 &nbsp;·&nbsp; Embossed</div><div class="logo-placeholder">[ Embossed Version ]</div><div class="logo-card-name">Embossed Version</div><div class="logo-card-uses">Monochrome, no gradients. Luxury appearance. Leather portfolios · Presentation folders · Embroidery · Apparel</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 08 &nbsp;·&nbsp; Dark Mode</div><div class="logo-placeholder" style="background:#0a0c10;">[ Dark Mode ]</div><div class="logo-card-name">Dark Mode</div><div class="logo-card-uses">Gold + White on transparent. Optimized for dark backgrounds, screens, and digital use.</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 09 &nbsp;·&nbsp; Light Mode</div><div class="logo-placeholder" style="background:#F0F0EC;color:#555;">[ Light Mode ]</div><div class="logo-card-name">Light Mode</div><div class="logo-card-uses">Navy + Gold on white background. Print, light-themed digital, and editorial use.</div></div>
+        <div class="logo-card"><div class="logo-card-id">Logo 10 &nbsp;·&nbsp; Motion</div><div class="logo-placeholder">[ Motion Logo &nbsp;·&nbsp; 6 sec ]</div><div class="logo-card-name">Motion Logo</div><div class="logo-card-uses">6-second animated sequence for video intros and reels. See Animation Standard below.</div></div>
+      </div>
+      <div class="spec-block" style="margin-bottom:14px;"><div class="spec-block-title">Animation Standard &mdash; Motion Logo Sequence (6 Seconds)</div><div class="spec-block-body"><div class="anim-steps"><div class="anim-step"><div class="anim-num">1</div><div>Gold flight path draws across screen</div></div><div class="anim-step"><div class="anim-num">2</div><div>Global 8000 silhouette follows the path</div></div><div class="anim-step"><div class="anim-num">3</div><div>KURT HOLDEN fades in (Sunrise Gold)</div></div><div class="anim-step"><div class="anim-num">4</div><div>FLIGHT PATH appears (Executive White)</div></div><div class="anim-step"><div class="anim-num">5</div><div>Tagline fades up</div></div><div class="anim-step"><div class="anim-num">6</div><div>Hold for 2 seconds</div></div><div class="anim-step"><div class="anim-num">7</div><div>Transition to content</div></div></div></div></div>
+      <div class="spec-block"><div class="spec-block-title">Approved Asset Library &mdash; Required File Formats</div><div class="spec-block-body"><div class="files-grid"><div><div class="file-group-title">Vector</div><div style="color:var(--muted);font-size:13px;">SVG &nbsp;·&nbsp; AI &nbsp;·&nbsp; PDF</div></div><div><div class="file-group-title">Raster</div><div style="color:var(--muted);font-size:13px;">Transparent PNG &nbsp;·&nbsp; Dark Mode PNG &nbsp;·&nbsp; Light Mode PNG</div></div><div><div class="file-group-title">Motion</div><div style="color:var(--muted);font-size:13px;">Animated GIF &nbsp;·&nbsp; MP4 &nbsp;·&nbsp; WEBM</div></div><div><div class="file-group-title">Required Variations</div><div style="color:var(--muted);font-size:13px;">Master · Horizontal · Stacked · Seal · Monogram · Signature · Embossed · Dark · Light · Motion</div></div></div></div></div>
+    </div>
+
+    <!-- ── TAB: VISUAL ASSETS ─────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-assets">
+      <div class="studio-section-title">Visual Asset Library &mdash; 6 Categories</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">
+        <div class="asset-category-card"><div class="asset-cat-icon">PORTRAITS</div><div class="asset-cat-name">Executive Portraits</div><div class="asset-cat-desc">Professional photography for media kit, LinkedIn header, article bylines, and executive presentations.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">BRAND ASSETS</div><div class="asset-cat-name">Brand Asset Library</div><div class="asset-cat-desc">All logo files, color palettes, brand elements, and templates in all approved formats. Includes all 10 logo variations.</div><div class="asset-cat-status s-progress">&#9679; Design in Progress</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">AIRCRAFT</div><div class="asset-cat-name">Aircraft Reference Library</div><div class="asset-cat-desc">Approved Global 8000 silhouettes and high-quality aviation photography cleared for brand use.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">BACKGROUNDS</div><div class="asset-cat-name">Background Library</div><div class="asset-cat-desc">Midnight Navy textures, dark aviation photography, and approved presentation backgrounds for all content formats.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">ICONS</div><div class="asset-cat-name">Icon Library</div><div class="asset-cat-desc">Custom icon set in Sunrise Gold for use across website, presentations, documents, and digital content.</div><div class="asset-cat-status s-planned">&#9675; Planned</div></div>
+        <div class="asset-category-card"><div class="asset-cat-icon">MOTION</div><div class="asset-cat-name">Motion Graphics Library</div><div class="asset-cat-desc">Lower thirds, transitions, animated Gold Flight Path elements, and the cinematic intro package.</div><div class="asset-cat-status s-progress">&#9679; Storyboard Complete</div></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: STRATEGY ──────────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-strategy">
+      <div class="studio-section-title">Strategy Documents &mdash; 01 Strategy</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Studio Visual Bible</div><div class="doc-desc">Master reference for every visual decision across the Kurt Holden Studios brand system. The single source of truth for all design choices.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Studio Production Bible</div><div class="doc-desc">Production standards, workflows, and quality benchmarks for all studio output across every content type.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Flight Path Brand Playbook</div><div class="doc-desc">Voice, tone, editorial standards, and brand rules for the Flight Path series. The guide for every article and post.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Brand Kit</div><div class="doc-desc">Ready-to-share brand package for media partners, collaborators, and press. Includes logos, colors, and bio copy.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Media System</div><div class="doc-desc">Complete media presence architecture including platforms, formats, publishing cadence, and distribution strategy.</div></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: MOTION ────────────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-motion">
+      <div class="studio-section-title">Motion &amp; Video Production &mdash; 05 Motion</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+        <div class="doc-card"><div class="doc-status s-progress">&#9679; Storyboard Complete</div><div class="doc-name">Cinematic Intro Project</div><div class="doc-desc">Full-production cinematic brand intro for all video content. Storyboards finalized. Production pending logo finalization.</div></div>
+        <div class="doc-card"><div class="doc-status s-complete">&#10003; Complete</div><div class="doc-name">Storyboards</div><div class="doc-desc">Scene-by-scene visual breakdown of the cinematic intro and motion logo sequence. Ready for production handoff.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Shot Lists</div><div class="doc-desc">Camera angles, composition guides, and production notes for all video shoots including b-roll and executive segments.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Sound Design</div><div class="doc-desc">Audio identity system — music selection, sound effects, voice treatment standards, and cinematic audio mix.</div></div>
+        <div class="doc-card"><div class="doc-status s-progress">&#9679; Design in Progress</div><div class="doc-name">Motion Logo (Logo 10)</div><div class="doc-desc">6-second animated logo. Gold flight path draws, aircraft follows, KURT HOLDEN fades in. Awaiting finalized vector files.</div></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: PRODUCTION ────────────────────────────────────────────────── -->
+    <div class="studio-pane" id="studio-production">
+      <div class="studio-section-title">Production &amp; Operations &mdash; 06 Production</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">AI Prompt Library</div><div class="doc-desc">Curated, tested prompts for article drafting, image generation, content repurposing, and social adaptation across all three series.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Production Checklists</div><div class="doc-desc">Pre-publish, pre-post, and pre-release quality checklists for every content type — articles, posts, videos, and presentations.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Export Standards</div><div class="doc-desc">File format, resolution, color profile, and naming conventions for all exported assets across every platform.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Version History</div><div class="doc-desc">Change log for all major brand documents, logo versions, and specification updates. The record of how the brand evolves.</div></div>
+        <div class="doc-card"><div class="doc-status s-planned">&#9675; Planned</div><div class="doc-name">Asset Tracking</div><div class="doc-desc">Master inventory of all brand assets — location, format, version, approval status, and usage rights.</div></div>
+      </div>
+    </div>
+
   </div>
 
 <!-- POST MODAL -->
@@ -1504,6 +1614,14 @@ function charCount(el, countId, max) {
   if (!cc) return;
   cc.textContent = `${n} / ${max}`;
   cc.className = 'char-count' + (n > max ? ' char-over' : n > max * 0.85 ? ' char-warn' : '');
+}
+
+function showStudioTab(tab, btn) {
+  document.querySelectorAll('.studio-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.studio-tab').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('studio-' + tab);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 function refreshCurrentPanel() {
